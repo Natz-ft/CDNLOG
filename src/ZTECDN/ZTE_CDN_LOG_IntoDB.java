@@ -67,7 +67,7 @@ public class ZTE_CDN_LOG_IntoDB
     DBAcess db = new DBAcess();
     if (db.createConnLocal())
     {
-      String sql = "SELECT \tCONCAT(\t\tSUBSTR(fileName, 1, 14),'_',SUBSTR(fileName, 29, 8)\t) TABLENAME FROM\tcdn_zte_log_untar WHERE\t(STATUS = '' OR STATUS IS NULL) GROUP BY\tCONCAT(\tSUBSTR(fileName, 1, 14),\t'_',\tSUBSTR(fileName, 29, 8)\t)   ";
+      String sql = "SELECT \tCONCAT(\t\tSUBSTR(fileName, 1, 14),'_',SUBSTR(fileName, 20, 17)\t) TABLENAME FROM\tcdn_zte_log_untar WHERE\t(STATUS = '' OR STATUS IS NULL) GROUP BY\tCONCAT(\tSUBSTR(fileName, 1, 14),\t'_',\tSUBSTR(fileName, 29, 8)\t)   ";
       db.query(sql);
       while (db.next())
       {
@@ -139,18 +139,18 @@ public class ZTE_CDN_LOG_IntoDB
       {
         String[] logLine = ((String)fileList.get(i)).split("\\|");
         if (logLine.length >= 1) {
-          if (logLine[6].contains("accountinfo"))
+          if ((logLine[6].contains("accountinfo"))||(table_name.contains("WEBCACHE")))
           {
             String cellPhone = getUserId(logLine[6]);
             
             String sql = "insert into " + 
               table_name + 
-              " (filename,TermialIP,ServerIP,RelativeURL,BeginTime,EndTime,duration,volume,ServiceType,ContentID,userNumber,responsetime,responsecode,FirstRespTime) values" + 
-              " ('" + fileName + "','" + logLine[0] + "', '" + logLine[2] + "', '" + logLine[6] + "', '" + 
+              " (filename,TermialIP,ServerIP,DomainName,RelativeURL,BeginTime,EndTime,duration,volume,ServiceType,ContentID,userNumber,responsetime,responsecode,FirstRespTime) values" + 
+              " ('" + fileName + "','" + logLine[0] + "', '" + logLine[2] + "','"+ logLine[5] +"','" + logLine[6] + "', '" + 
               logLine[8] + "','" + logLine[9] + "','" + logLine[13] + 
               "','" + logLine[14] + "','" + logLine[23] + "','" + 
               logLine[28] + "','" + cellPhone + "','" + logLine[32] + "','" + logLine[37] + "','" + logLine[43] + "' )";
-            
+            //System.out.println("insert_sql:"+sql);
             list_sql.add(sql);
           }
         }
@@ -252,7 +252,8 @@ public class ZTE_CDN_LOG_IntoDB
     table_name = table_name.replace("-", "_");
     table_name = table_name.replace(".", "_");
     
-    table_name = table_name.substring(0, 14) + table_name.substring(27, 36);
+    //table_name = table_name.substring(0, 14) + table_name.substring(27, 36);
+    table_name = table_name.substring(0, 14) + table_name.substring(18, 36);
     table_name = table_name.toUpperCase();
     return table_name;
   }

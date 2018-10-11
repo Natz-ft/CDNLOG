@@ -20,7 +20,7 @@ public class SendMailText_Picture_Enclosure {
     //发件人地址
     public static String senderAddress = "dirxu@126.com";
     //收件人地址
-    public static String recipientAddress = "13604218538@139.com";
+    public static String recipientAddress = "dirxu@126.com";
     //发件人账户名
     public static String senderAccount = "dirxu@126.com";
     //发件人账户密码
@@ -72,7 +72,7 @@ public class SendMailText_Picture_Enclosure {
          */
         msg.setRecipient(MimeMessage.RecipientType.TO,new InternetAddress(recipientAddress));
         //4.设置邮件主题
-        msg.setSubject("邮件主题(包含图片和附件)","UTF-8");
+        msg.setSubject("邮件主题(包含图片和附件660)","UTF-8");
          
         //下面是设置邮件正文
         //msg.setContent("简单的纯文本邮件！", "text/html;charset=UTF-8");
@@ -80,21 +80,31 @@ public class SendMailText_Picture_Enclosure {
         // 5. 创建图片"节点"
         MimeBodyPart image = new MimeBodyPart();
         // 读取本地文件
-        DataHandler dh = new DataHandler(new FileDataSource("F:\\monitor\\WebRoot\\images\\s10.jpg"));
+        DataHandler dh = new DataHandler(new FileDataSource("F:\\A003.png"));
+       
         // 将图片数据添加到"节点"
         image.setDataHandler(dh);
+        
+       
+        
         // 为"节点"设置一个唯一编号（在文本"节点"将引用该ID）
-        image.setContentID("mailTestPic");    
+        image.setContentID("mailTestPic");  
+        
+       //image.setContentID("mailTestPic2");   
          
         // 6. 创建文本"节点"
         MimeBodyPart text = new MimeBodyPart();
         // 这里添加图片的方式是将整个图片包含到邮件内容中, 实际上也可以以 http 链接的形式添加网络图片
-        text.setContent("这是一张图片<br/><a href='http://www.cnblogs.com/ysocean/p/7666061.html'><img src='cid:mailTestPic'/></a>", "text/html;charset=UTF-8");
+        text.setContent("这是一张图片<br/><a href='http://localhost:8080/WEBCDN/2.jsp'><img src='cid:mailTestPic'/>", "text/html;charset=UTF-8");
+        
          
         // 7. （文本+图片）设置 文本 和 图片"节点"的关系（将 文本 和 图片"节点"合成一个混合"节点"）
         MimeMultipart mm_text_image = new MimeMultipart();
         mm_text_image.addBodyPart(text);
         mm_text_image.addBodyPart(image);
+        mm_text_image.setSubType("related");    // 关联关系
+        
+         
         mm_text_image.setSubType("related");    // 关联关系
          
         // 8. 将 文本+图片 的混合"节点"封装成一个普通"节点"
