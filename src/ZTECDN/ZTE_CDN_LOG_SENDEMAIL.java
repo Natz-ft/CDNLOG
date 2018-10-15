@@ -9,12 +9,14 @@ import TOOLS.getProperties;
 
 public class ZTE_CDN_LOG_SENDEMAIL {
 	
+	 //private static String PAGE = getProperties.getPropertie("PAGE").trim();
+	
 	public  static  String[] receiverAddrs = getProperties.getPropertie("receiverAddr").trim().split("\\|");
 	
 	//SELECT * from (SELECT TermialIP,ServerIP,ContentID,responsecode,count(*) s from bcs_cdn_024_as_20180923 where responsecode like '4%' GROUP BY TermialIP,ServerIP,ContentID,responsecode ) a ORDER BY s desc 
 	
 	  public static void main(String[] args) {
-	      
+	     
 			String yesterday = "";
 			 if (args.length<1){
 				 yesterday = TOOLS.getDate.getYesterday();

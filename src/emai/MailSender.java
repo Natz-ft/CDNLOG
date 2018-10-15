@@ -21,8 +21,10 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeUtility;
 
 /**
- * * @decrisption 实现邮件的发送 * @author huhao * @version Nov 19, 2013 11:47:47 AM * @since
- * JDK1.6.0_10 spring3.2.0
+ * *@decrisption 实现邮件的发送 *
+ *  @author huhao * 
+ *  @version Nov 19, 2013 11:47:47 AM * 
+ *  @since * JDK1.6.0_10 spring3.2.0
  */
 public class MailSender {
 	private MimeMessage msg;
@@ -37,20 +39,23 @@ public class MailSender {
 	 * * * 发送邮件,可发送多个图片和附件 * @author huhao * @date Nov 19, 2013 10:25:44 AM * @param
 	 * ms * @throws EmailSendException * @throws UnsupportedEncodingException *
 	 */
-	public void sendEmail(EmailMessage ms) {
+	public   void sendEmail(EmailMessage ms) {
 		try {
 			// 得到环境对象
 			getMimeMessage(ms);
+			
+			System.out.println("EmailAccount:"+ms.getEmailAccount());
 			msg.setFrom(new InternetAddress(ms.getEmailAccount()));
-			String[] receiverArray = ms.getReceiver().trim().split(",|，");
-			// 收件人InternetAddress数组
+			System.out.println(ms.getReceiver().trim());
+			String[] receiverArray = ms.getReceiver().trim().split("\\|");
+			
+			// 收件人InternetAddress数组			
 			InternetAddress[] receiverAddressArray = new InternetAddress[receiverArray.length];
 			for (int i = 0; i < receiverArray.length; i++) {
 				receiverAddressArray[i] = new InternetAddress(
 						receiverArray[i].trim());
 			}
-			msg.setRecipients(MimeMessage.RecipientType.TO,
-					receiverAddressArray); // 设置收件人
+			msg.setRecipients(MimeMessage.RecipientType.TO,receiverAddressArray); // 设置收件人
 			// 暗送
 			if (ms.getBcc() != null && !"".equals(ms.getBcc().trim())) {
 				String[] bccArray = ms.getBcc().trim().split(",|，");
@@ -58,8 +63,7 @@ public class MailSender {
 				for (int i = 0; i < bccArray.length; i++) {
 					bccAddressArray[i] = new InternetAddress(bccArray[i].trim());
 				}
-				msg.setRecipients(MimeMessage.RecipientType.BCC,
-						bccAddressArray);
+				msg.setRecipients(MimeMessage.RecipientType.BCC,bccAddressArray);
 			}
 			// 抄送
 			if (ms.getCc() != null && !"".equals(ms.getCc().trim())) {
@@ -169,7 +173,8 @@ public class MailSender {
 		List<MimeBodyPart> attachmentParts = new ArrayList<MimeBodyPart>();
 		for (String source : sources) {
 			MimeBodyPart attachmentPart = new MimeBodyPart();
-			DataHandler dh = new DataHandler(new FileDataSource(source));// jaf会自动探测文件的MIME类型
+			DataHandler dh = new DataHandler(new FileDataSource(source));
+			// jaf会自动探测文件的MIME类型
 			String name = dh.getName();
 			attachmentPart.setDataHandler(dh);
 			attachmentPart.setFileName(MimeUtility.encodeText(name

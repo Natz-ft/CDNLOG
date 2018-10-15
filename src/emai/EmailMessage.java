@@ -167,8 +167,10 @@ public class EmailMessage implements Serializable {
 		StringBuffer sb = new StringBuffer();
 		sb.append(email.getContent());
 		// 处理邮件中图片和附件的路径
+		System.out.println(email.getImagePath());
 		for (String realImgPath : email.getImagePath().split("\\|")) {
 			String cid = genPK();
+			System.out.println("cid:"+cid);
 			// String cid=System.currentTimeMillis()+"";
 			map.put(realImgPath, cid);
 			sb.append("<br/><img src='cid:").append(cid).append("'")

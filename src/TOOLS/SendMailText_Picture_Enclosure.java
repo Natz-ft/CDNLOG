@@ -80,7 +80,7 @@ public class SendMailText_Picture_Enclosure {
         // 5. 创建图片"节点"
         MimeBodyPart image = new MimeBodyPart();
         // 读取本地文件
-        DataHandler dh = new DataHandler(new FileDataSource("F:\\A003.png"));
+        DataHandler dh = new DataHandler(new FileDataSource("F:\\A009.png"));
        
         // 将图片数据添加到"节点"
         image.setDataHandler(dh);
