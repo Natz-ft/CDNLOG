@@ -10,5 +10,8 @@
 	<classpathentry kind="lib" path="F:/sss/getData/run/lib/commons-lang3-3.7.jar"/>
 	<classpathentry kind="lib" path="F:/sss/getData/run/lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="F:/sss/getData/run/lib/javax.mail_1.6.0.jar"/>
+	<classpathentry kind="lib" path="F:/sss/lib/poi-3.17.jar"/>
+	<classpathentry kind="lib" path="F:/sss/lib/httpcore-4.4.6.jar"/>
+	<classpathentry kind="lib" path="F:/sss/lib/httpclient-4.5.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

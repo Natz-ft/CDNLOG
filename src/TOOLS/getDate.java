@@ -151,6 +151,25 @@ public class getDate
     return dateString;
   }
   
+  
+  
+  public static String getTomorrow()
+  {
+    Date date = new Date();
+    Calendar calendar = new GregorianCalendar();
+    calendar.setTime(date);
+    
+    calendar.add(5, 1);
+    
+    date = calendar.getTime();
+    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+    
+    String dateString = formatter.format(date);
+    
+    return dateString;
+  
+  }
+  
   public static String getYesterday(Date date)
   {
     Calendar calendar = new GregorianCalendar();
@@ -164,6 +183,22 @@ public class getDate
     String dateString = formatter.format(date);
     
     return dateString;
+  }
+  
+  public static String getTomorrow(Date date)
+  {
+	  Calendar calendar = new GregorianCalendar();
+	    calendar.setTime(date);
+	    
+	    calendar.add(5, 1);
+	    
+	    date = calendar.getTime();
+	    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+	    
+	    String dateString = formatter.format(date);
+	    
+	    return dateString;
+  
   }
   
   public static String getToday()

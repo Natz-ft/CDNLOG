@@ -10,9 +10,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Properties; 
+import java.util.Properties;
 
 import com.mysql.jdbc.exceptions.MySQLSyntaxErrorException;
+
+import excel.Common;
+import excel.buglist;
+import excel.portList;
 
 public class DBAcess {
 	private String drv = "oracle.jdbc.driver.OracleDriver";
@@ -23,24 +27,20 @@ public class DBAcess {
 
 	private String pwd = "";
 
-	private   Connection conn = null;
+	private Connection conn = null;
 
 	private Statement stm = null;
 	private PreparedStatement pst = null;
 
 	private ResultSet rs = null;
-	
- 
-   
-	
-	public   boolean createConn() { // web 
+
+	public boolean createConn() { // web
 		boolean b = false;
 		Properties prop;
-		prop = new Properties();		
-		try {		 
+		prop = new Properties();
+		try {
 			prop.load(new FileInputStream(getPath()));
-			
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -49,27 +49,25 @@ public class DBAcess {
 		String url = prop.getProperty("maximourl");
 		String user = prop.getProperty("maximouser");
 		String passwd = prop.getProperty("maximopassword");
-		//System.out.print(driver);
-		
-		
+		// System.out.print(driver);
+
 		try {
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url, user, passwd);
 			b = true;
 		} catch (SQLException e) {
 		} catch (ClassNotFoundException e) {
-		} 
+		}
 		return b;
 	}
-	
-	public   boolean createConnIP() { // web 
+
+	public boolean createConnIP() { // web
 		boolean b = false;
 		Properties prop;
-		prop = new Properties();		
-		try {		 
+		prop = new Properties();
+		try {
 			prop.load(new FileInputStream(getPath()));
-			
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -78,88 +76,74 @@ public class DBAcess {
 		String url = prop.getProperty("IPurl");
 		String user = prop.getProperty("maximouser");
 		String passwd = prop.getProperty("maximopassword");
-		//System.out.print(driver);
-		
-		
-		
-		
+		// System.out.print(driver);
+
 		try {
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url, user, passwd);
 			b = true;
-			
+
 		} catch (SQLException e) {
 		} catch (ClassNotFoundException e) {
-		} 
+		}
 		return b;
 	}
-	
-	
-	public   boolean createConnLocal(String driver,String url ,String user,String passwd ) { // web 
+
+	public boolean createConnLocal(String driver, String url, String user,
+			String passwd) { // web
 		boolean b = false;
-		
-		//System.out.print(driver);
-		
-		
-		
-		
+
+		// System.out.print(driver);
+
 		try {
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url, user, passwd);
 			b = true;
-			
+
 		} catch (SQLException e) {
 		} catch (ClassNotFoundException e) {
-		} 
+		}
 		return b;
 	}
-	
-	public   boolean createConnLocal() { // web 
+
+	public boolean createConnLocal() { // web
 		boolean b = false;
 		Properties prop;
-		prop = new Properties();		
-		try {		 
+		prop = new Properties();
+		try {
 			prop.load(new FileInputStream(getPath()));
-			
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 
 		String driver = prop.getProperty("maximodriver");
-		String url = prop.getProperty   ("localurl");
-		String user = prop.getProperty  ("localuser");
+		String url = prop.getProperty("localurl");
+		String user = prop.getProperty("localuser");
 		String passwd = prop.getProperty("localpassword");
-		
-		//System.out.print("localurl:"+url);
-		
-		
-		
-		
+
+		// System.out.print("localurl:"+url);
+
 		try {
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url, user, passwd);
 			b = true;
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-		} 
-		//System.out.println("b:"+b);
+		}
+		// System.out.println("b:"+b);
 		return b;
 	}
-	
-	
-	
-	
-	public   boolean createConnLocalIP() { // web 
+
+	public boolean createConnLocalIP() { // web
 		boolean b = false;
 		Properties prop;
-		prop = new Properties();		
-		try {		 
+		prop = new Properties();
+		try {
 			prop.load(new FileInputStream(getPath()));
-			
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -168,26 +152,22 @@ public class DBAcess {
 		String url = prop.getProperty("localipurl");
 		String user = prop.getProperty("localuser");
 		String passwd = prop.getProperty("localpassword");
-		
-		System.out.print("localipurl:"+url);
-		
-		
-		
-		
+
+		System.out.print("localipurl:" + url);
+
 		try {
 			Class.forName(driver);
 			conn = DriverManager.getConnection(url, user, passwd);
 			b = true;
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-		} 
-		System.out.println("b:"+b);
+		}
+		System.out.println("b:" + b);
 		return b;
 	}
-	
-	
+
 	public static String getPath() { // ��ȡ�����ļ�·��
 		String path = "", path_2 = "", path_1 = "";
 
@@ -197,7 +177,8 @@ public class DBAcess {
 			Properties prop = new Properties();
 			File directory = new File("");// ����Ϊ��
 
-			//System.out.println("path:  "+ g.getClass().getResource("/").getPath());
+			// System.out.println("path:  "+
+			// g.getClass().getResource("/").getPath());
 			File f = new File(g.getClass().getResource("/").getPath());
 
 			try {
@@ -212,12 +193,13 @@ public class DBAcess {
 
 			try {
 				// ��������·��
-				path = path_1 + File.separator + "src" + File.separator 	+ "db.properties";
+				path = path_1 + File.separator + "src" + File.separator
+						+ "db.properties";
 				prop.load(new FileInputStream(path));
 
 			} catch (IOException e1) {
 				// path+ File.separator +"db.properties"
-				//System.out.println("path_2��" + path_2);
+				// System.out.println("path_2��" + path_2);
 
 				try {
 					// web����·��
@@ -232,19 +214,78 @@ public class DBAcess {
 			File directory = new File("");// ����Ϊ��
 			try {
 				path = directory.getCanonicalPath();
-				path = path + File.separator + "db.properties";				
-				//System.out.println("db.properties:  "+path);
-			}
-			catch (Exception e01) {
+				path = path + File.separator + "db.properties";
+				// System.out.println("db.properties:  "+path);
+			} catch (Exception e01) {
 				e01.printStackTrace();
 			}
 		}
-		//System.out.println("path:  "+path);
+		// System.out.println("path:  "+path);
 		return path;
 
 	}
-	
-	
+
+	public void insert(String sql, buglist buglist) throws SQLException {
+
+		try {
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, buglist.getIp()); // ip
+
+			pst.setString(2, buglist.getPort()); // port
+			pst.setString(3, buglist.getProtocol()); // protocol
+			pst.setString(4, buglist.getService()); // service
+			pst.setString(5, buglist.getBug_name()); // bug_name
+			pst.setString(6, buglist.getBug_num()); // bug_num
+			pst.setString(7, buglist.getBug_class()); // bug_class
+			pst.setString(8, buglist.getBug_classify()); // bug_classify
+			pst.setString(9, buglist.getApp_classify()); // app_classify
+			pst.setString(10, buglist.getSys_classify()); // sys_classify
+			pst.setString(11, buglist.getThreaten_classify());// threaten_classify
+			pst.setString(12, buglist.getTime_classify());// time_classify
+			pst.setString(13, buglist.getCVE_year());// CVE_year
+			pst.setString(14, buglist.getDev_date());// dev_date
+			pst.setString(15, buglist.getCve_num());// cve_num
+			pst.setString(16, buglist.getCNNVD_num());// CNNVD_num
+			pst.setString(17, buglist.getCNVD_num());// CNCVE_num
+			pst.setString(18, buglist.getCNVD_num());// CNVD_num
+			pst.setString(19, buglist.getDescribe());// describe
+			pst.setString(20, buglist.getSolve());// solve
+			pst.setString(21, buglist.getReturn_des());// return_des
+			pst.setInt(22, buglist.getSort());// return_des
+
+			boolean flag = pst.execute();
+			if (!flag) {
+				// System.out.println("Save data : IP. = " + buglist.getIp() +
+				// " , Name = " + buglist.getBug_name() + " succeed!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error " + buglist.getIp());
+		}
+	}
+
+	public void insert(String sql, portList portList) throws SQLException {
+
+		try {
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, portList.getPath()); // ip
+
+			pst.setString(2, portList.getPort()); // port
+			pst.setString(3, portList.getProtocol()); // protocol
+			pst.setString(4, portList.getService()); // service
+			pst.setInt(5, portList.getId()); // bug_name
+
+			boolean flag = pst.execute();
+			if (!flag) {
+				// System.out.println("Save data : IP. = " + buglist.getIp() +
+				// " , Name = " + buglist.getBug_name() + " succeed!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error " + portList.getIp());
+		}
+	}
+
 	public boolean insert(String sql) throws SQLException {
 		// String cp_chinese = new String(str.getBytes("utf-8"),"utf-8");
 		conn.setAutoCommit(false);
@@ -260,96 +301,8 @@ public class DBAcess {
 				b = true;
 			}
 		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-			System.out.println("Duplicate colume"+"\t"+sql);
+			System.out.println("Duplicate colume" + "\t" + sql);
 
-		}
-		 catch (Exception e) {
-				e.printStackTrace();
-
-			}
-
-		return b;
-
-	}
-	
-	
-	public boolean List_insert(List<String> List_sql) throws SQLException {
-		// String cp_chinese = new String(str.getBytes("utf-8"),"utf-8");
-		boolean b = false;
-		
-		conn.setAutoCommit(false);
-		stm = conn.createStatement();
-		for (int i=0;i<List_sql.size();i++ ){
-		try {
-		
-			
-            //System.out.println(List_sql.get(i));
-            stm.addBatch(List_sql.get(i));     
-
-		
-		} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
-			System.out.println("Duplicate colume"+"\t"+List_sql.get(i));
-
-		}
-		 catch (Exception e) {
-				e.printStackTrace();
-
-			}
-		}
-	  //
-		try { 
-		int rows[] =stm.executeBatch();				 	
-		b =true;	
-		conn.commit();
-		}
-		catch (Exception e){
-			e.printStackTrace();
-			conn.rollback();
-		}
-		 
-	 
-		return b;
-
-	}
-	
-	
-/*	public static void insertRelease() {  // 批量 insert 
-        Long begin = new Date().getTime();  
-        String sql = "INSERT INTO tb_big_data (count, create_time, random) VALUES (?, SYSDATE(), ?)";  
-        try {  
-            conn.setAutoCommit(false);  
-            PreparedStatement pst = conn.prepareStatement(sql);  
-            for (int i = 1; i <= 100; i++) {  
-                for (int k = 1; k <= 10000; k++) {  
-                    pst.setLong(1, k * i);  
-                    pst.setLong(2, k * i);  
-                    pst.addBatch();  
-                }  
-                pst.executeBatch();  
-                conn.commit();  
-            }  
-            pst.close();  
-            conn.close();  
-        } catch (SQLException e) {  
-            e.printStackTrace();  
-        }  
-        Long end = new Date().getTime();  
-        System.out.println("cast : " + (end - begin) / 1000 + " s");  
-    } */ 
-	
-	
-	public boolean truncate(String tableName) {
-		String sql = "truncate table "+  tableName;
-		
-		boolean b = false;
-		try {
-			stm = conn.createStatement();
-
-			pst = conn.prepareStatement(sql);
-
-			int rows = pst.executeUpdate();
-			System.out.println (tableName+" is truncated !!! ") ;
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -358,49 +311,112 @@ public class DBAcess {
 		return b;
 
 	}
-	//stmt.executeLargeUpdate(creatsql))
-	
-	
-	
+
+	public boolean List_insert(List<String> List_sql) throws SQLException {
+		// String cp_chinese = new String(str.getBytes("utf-8"),"utf-8");
+		boolean b = false;
+
+		conn.setAutoCommit(false);
+		stm = conn.createStatement();
+		for (int i = 0; i < List_sql.size(); i++) {
+			try {
+
+				// System.out.println(List_sql.get(i));
+				stm.addBatch(List_sql.get(i));
+
+			} catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException e) {
+				System.out.println("Duplicate colume" + "\t" + List_sql.get(i));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+
+			}
+		}
+		//
+		try {
+			int rows[] = stm.executeBatch();
+			b = true;
+			conn.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+		}
+
+		return b;
+
+	}
+
+	/*
+	 * public static void insertRelease() { // 批量 insert Long begin = new
+	 * Date().getTime(); String sql =
+	 * "INSERT INTO tb_big_data (count, create_time, random) VALUES (?, SYSDATE(), ?)"
+	 * ; try { conn.setAutoCommit(false); PreparedStatement pst =
+	 * conn.prepareStatement(sql); for (int i = 1; i <= 100; i++) { for (int k =
+	 * 1; k <= 10000; k++) { pst.setLong(1, k * i); pst.setLong(2, k * i);
+	 * pst.addBatch(); } pst.executeBatch(); conn.commit(); } pst.close();
+	 * conn.close(); } catch (SQLException e) { e.printStackTrace(); } Long end
+	 * = new Date().getTime(); System.out.println("cast : " + (end - begin) /
+	 * 1000 + " s"); }
+	 */
+
+	public boolean truncate(String tableName) {
+		String sql = "truncate table " + tableName;
+
+		boolean b = false;
+		try {
+			stm = conn.createStatement();
+
+			pst = conn.prepareStatement(sql);
+
+			int rows = pst.executeUpdate();
+			System.out.println(tableName + " is truncated !!! ");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return b;
+
+	}
+
+	// stmt.executeLargeUpdate(creatsql))
+
 	public boolean createTable(String sql) {
 		// String cp_chinese = new String(str.getBytes("utf-8"),"utf-8");
 		boolean b = false;
 		try {
-			//stm = conn.createStatement();
+			// stm = conn.createStatement();
 			stm = conn.createStatement();
-			
+
 			pst = conn.prepareStatement(sql);
 
-			int rows = pst.executeUpdate();			 
-				b = true;
-			 
-		}
-		catch (MySQLSyntaxErrorException e1){
-			
-			
-		}
-		catch (Exception e) {
+			int rows = pst.executeUpdate();
+			b = true;
+
+		} catch (MySQLSyntaxErrorException e1) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
 		return b;
 
 	}
-	
-	
-	public boolean createIndex(String tableName,String IndexName,String colName) {
-		 String sql  = "CREATE INDEX "+ IndexName + " on " + tableName + "("+colName+")" ;
+
+	public boolean createIndex(String tableName, String IndexName,
+			String colName) {
+		String sql = "CREATE INDEX " + IndexName + " on " + tableName + "("
+				+ colName + ")";
 		boolean b = false;
 		try {
-			//stm = conn.createStatement();
-			System.out.println("sql:\t"+sql);
-			
-			 
-			stm = conn.createStatement();			
-			 
-			boolean rows =stm.execute(sql);		
-		
-			 
+			// stm = conn.createStatement();
+			System.out.println("sql:\t" + sql);
+
+			stm = conn.createStatement();
+
+			boolean rows = stm.execute(sql);
+
 			if (rows) {
 				b = true;
 			}
@@ -411,9 +427,6 @@ public class DBAcess {
 		return b;
 
 	}
-	
-	
-	
 
 	public boolean update(String sql) {
 		// String cp_chinese = new String(str.getBytes("utf-8"),"utf-8");
@@ -426,23 +439,20 @@ public class DBAcess {
 			int rows = pst.executeUpdate();
 			if (rows > 0) {
 				b = true;
-				
-				
+
 				try {
-					
+
 					Thread.sleep(500);
-				}
-				catch(Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				 
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-        
-		
+
 		return b;
 
 	}
@@ -458,7 +468,7 @@ public class DBAcess {
 	public boolean next() {
 		boolean b = false;
 		try {
-			
+
 			if (rs.next())
 				b = true;
 		} catch (Exception e) {
@@ -485,30 +495,21 @@ public class DBAcess {
 		}
 		return value;
 	}
-	
- 
-	
-	
+
 	public int queryRow(String sql) {
-		int num=0;
+		int num = 0;
 		try {
 			stm = conn.createStatement();
 			rs = stm.executeQuery(sql);
-			while (rs.next()){
+			while (rs.next()) {
 				num++;
-				//System.out.println("num++ " + num);
+				// System.out.println("num++ " + num);
 			}
-			
-			
+
 		} catch (Exception e) {
 		}
 		return num;
 	}
-	
-	
-	
-	
-	
 
 	public void closeConn() {
 		try {
