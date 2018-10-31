@@ -344,7 +344,111 @@ public class SftpManager {
 		e.printStackTrace();
 	}
 }
+
+	public static boolean  downloadFileList_netflow(ChannelSftp sftp, String srcPath, String savePath,String vdate,String log_TableName,String must,String DoNot,String DBInfo)
+	 
+	{
+		boolean b = false;
+	//System.out.println(DBInfo);
+	//System.out.println(must);
+	//System.out.println(DoNot);
 	
+	String[] DBInfoS = DBInfo.split("\\|");
+ 	
+	String driver =DBInfoS[0];
+	String url =   DBInfoS[1];
+	String user =  DBInfoS[2];
+	String passwd= DBInfoS[3];
+	 
+	
+	
+	File localFile=new File(savePath);//  
+	localFile.mkdirs();//  
+	
+	  String[] musts = must.toLowerCase().split("\\|");
+	  
+	  String[] DoNots = DoNot.toLowerCase().split("\\|");
+	  ////////////////////////////////
+		
+	  for (int j=0;j<DBInfoS.length;j++)
+		 {
+			  System.out.println("DBInfoS["+j+"]:\t"+DBInfoS[j]);
+		 }
+	  
+	  for (int j=0;j<DoNots.length;j++)
+		 {
+		  System.out.println("DoNots["+j+"]:\t"+DoNots[j]);
+		 }
+	  
+	  for (int j=0;j<musts.length;j++)
+		 {
+		  System.out.println("musts["+j+"]:\t"+musts[j]);
+		 }
+	
+try {
+	System.out.println("srcPath:\t"+srcPath);
+   
+	sftp.cd(srcPath);
+ 
+	
+	//logger.info("srcFile: " + srcFile);
+	String localPath = savePath ;
+	
+	List<String[]> fileList =listFiles(sftp,srcPath); //get file List dirxu：
+	
+		w :for (int i = 0; i < fileList.size(); i++) {
+			
+			
+			
+			if (fileList.get(i)[0].equals("0")) // if is dir Recurrence(digui) get
+			
+			{
+				if (!fileList.get(i)[1].contains(vdate)) {
+					continue w;
+				}
+
+			 
+				
+				 for (int j=0;j<musts.length;j++)
+				 {
+					 if ( !fileList.get(i)[1].toLowerCase().contains(musts[j]) ){
+						 
+						 
+						 continue w; 
+					 }
+				 }
+				 
+				 for (int j=0;j<DoNots.length;j++)
+				 {
+					 if ( fileList.get(i)[1].toLowerCase().contains(DoNots[j]) ){
+						// System.out.println("DoNots:\t"+fileList.get(i)[1]+"\t"+DoNots[j]);
+						 continue w; 
+					 }
+				 }
+				
+			 
+				if  ( SetLog.setlog(log_TableName, fileList.get(i)[1],	srcPath.replace("\\", "\\\\"),localPath.replace("\\", "\\\\"), driver,url,user,passwd  ));
+				{
+					 System.out.println("It is getting:\t"+srcPath+File.separator+fileList.get(i)[1]+"\t"+localPath	);
+					 sftp.get(fileList.get(i)[1], localPath);
+						
+				}
+			
+			 
+				 
+			} else {
+				downloadFileList(sftp, srcPath + "/" + fileList.get(i)[1],localPath + File.separator + fileList.get(i)[1],vdate,log_TableName,must,DoNot,DBInfo);
+			}
+		}
+	 b = true;
+}
+catch (Exception e)
+{
+	e.printStackTrace();
+	b = false;
+}
+return b;
+}
 	
 	
  

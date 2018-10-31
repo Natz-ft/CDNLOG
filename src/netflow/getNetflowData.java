@@ -43,6 +43,8 @@ public class getNetflowData {
 		    respContent = respContent.replace(":null", ":\"\"");
 		     
 		    respContent = respContent.replace("Src_servid,bps,maxbps\n", "");
+		    
+		    respContent = respContent.replace("Dst_servid,bps,maxbps\n", "");
 		    respContent = respContent.replace("\n", "|");
 		  return respContent;
 	  }

@@ -36,7 +36,7 @@ public class ZTE_CDN_LOG_ACC_DAY
     netflowInToDB.IntoDB_CDN(yesterday);
     netflowInToDB.IntoDB_cache(yesterday);
     netflowInToDB.IntoDB_OTT(yesterday);
-    
+    netflowInToDB.IntoDB_OTT_CITY(yesterday);
   }
   
   public static void accumulative_day(String day, String city)
