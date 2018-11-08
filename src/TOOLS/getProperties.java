@@ -11,7 +11,7 @@ public class getProperties {
 	
 	public static void main(String[] args) throws Exception {
 		
-		System.out.println(getPropertie("localPath"));
+		System.out.println(getPropertie("ZTElocalPath"));
 		
 	}
 	
@@ -62,7 +62,7 @@ public class getProperties {
 
 		try {
 
-			DBAcess g = new DBAcess();
+			getProperties g = new getProperties();
 			Properties prop = new Properties();
 			File directory = new File("");// ����Ϊ��
 
@@ -82,8 +82,11 @@ public class getProperties {
 			try {
 				// ��������·��
 				path = path_1 + File.separator + "src" + File.separator 	+ "db.properties";
+				
 				prop.load(new FileInputStream(path));
-
+				
+				 //System.out.println("path" + path);
+				 
 			} catch (IOException e1) {
 				// path+ File.separator +"db.properties"
 				//System.out.println("path_2��" + path_2);
@@ -108,9 +111,10 @@ public class getProperties {
 				e01.printStackTrace();
 			}
 		}
-		//System.out.println("path:  "+path);
+	//	System.out.println("path:  "+path);
 		return path;
 
 	}
 
 }
+

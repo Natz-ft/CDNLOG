@@ -34,7 +34,8 @@ import com.jcraft.jsch.SftpException;
 public class SftpManager {
 	private static final Logger logger = LoggerFactory.getLogger(SftpManager.class);
 	public static final String SFTP_PROTOCAL = "sftp";
- 
+	public static List<String[]> fileList3 = new ArrayList<String[]>();
+	public static List<List<String[]>> fileList4 = new ArrayList<List<String[]>>();
 	/**
 	 * 
 	 * @param host
@@ -157,6 +158,7 @@ public class SftpManager {
 		try {
 			sftp.cd(srcPath);
 			File file = new File(saveFile);
+			file.mkdirs();//
 			if (file.isDirectory()) {
 				sftp.get(srcfile, new FileOutputStream(file + SystemUtils.FILE_SEPARATOR + srcfile));
 			} else {
@@ -552,6 +554,64 @@ return b;
 		
 		return fileList;
 	}
+	
+	
+	
+	public static List<String[]> GetListFiles(ChannelSftp sftp, String srcPath) throws SftpException {
+		
+		List<List<String[]>> fileList0 = new ArrayList<List<String[]>>();
+		
+		List<String[]> fileList2 = new ArrayList<String[]>();
+		//System.out.println("srcPath"+"\t"+srcPath);
+		sftp.cd(srcPath); // 如果srcPath不是目录则会抛出异常
+		 
+		Vector<LsEntry> sftpFile = sftp.ls(srcPath);		 
+		
+		for (LsEntry lsEntry : sftpFile) {
+		 
+		String isDir = "0"; 
+		String FILENAME[]   = new String[3];
+			 Object its= lsEntry  ;
+             String FtpLongName = its.toString() ;             
+             
+             String  fileName = lsEntry.getFilename();
+			
+			if (".".equals(fileName) || "..".equals(fileName)) {
+				continue;
+			}
+			
+			if (FtpLongName.substring(0,1).equals("d")){
+				isDir = "1";	
+				//System.out.print("dir:"+srcPath+File.separator+fileName);
+				  GetListFiles(sftp, srcPath+"/"+fileName);
+			}
+			
+			FILENAME[0] = isDir;
+			FILENAME[1] = fileName;
+			FILENAME[2] =  srcPath;
+			//fileList2.add(FILENAME);// .add(FILENAME);	
+			//System.out.println(srcPath+"/"+fileName);
+			//fileList2.add(FILENAME);
+			
+			fileList3.add(FILENAME) ;
+			
+			
+			//for (int i=0;i<fileList.size();i++){
+				
+			//	fileList.add(fileList2.get(i));
+			//}
+			
+		}
+		
+/*		for (int i=0;i<fileList.size();i++){
+			System.out.println(i+"\t"+fileList.get(i)[0] + "\t" +fileList.get(i)[1] );
+		}*/
+		
+		return fileList3;
+	}
+	
+	
+	
  
 	/**
 	 * 删除文件

@@ -49,7 +49,7 @@ public class ZTE_CDN_LOG_SFTP {
  public static	String  ZTEMUST =  getProperties.getPropertie("ZTEMustHave").trim();
  public static	String  ZTEMDoNOT =  getProperties.getPropertie("ZTEDoNotHave").trim();
  
- public static	String driver = getProperties.getPropertie("maximodriver").trim();
+ public static	String driver = getProperties.getPropertie("mysqldriver").trim();
  public static	String url = getProperties.getPropertie("localurl").trim();
  public static	String user = getProperties.getPropertie("localuser").trim();
  public static	String passwd = getProperties.getPropertie("localpassword").trim();

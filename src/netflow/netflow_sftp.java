@@ -52,7 +52,7 @@ public class netflow_sftp {
 	public static String netFlowMDoNOT = getProperties.getPropertie(
 			"netFlowDoNotHave").trim();
 
-	public static String driver = getProperties.getPropertie("maximodriver")
+	public static String driver = getProperties.getPropertie("mysqldriver")
 			.trim();
 	public static String url = getProperties.getPropertie("localurl").trim();
 	public static String user = getProperties.getPropertie("localuser").trim();

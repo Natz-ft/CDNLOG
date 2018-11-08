@@ -7,10 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-
-
-
-public class SetLog {
+public class cdnSetLog {
+	public static String driver = getProperties.getPropertie("mysqldriver").trim();
+	public static String url = getProperties.getPropertie("localurl").trim();
+	public static String user = getProperties.getPropertie("localuser").trim();
+	public static String passwd = getProperties.getPropertie("localpassword").trim();
 	
 	public static void main(String[] args) throws Exception {
 		//SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//�������ڸ�ʽ
@@ -36,9 +37,11 @@ public class SetLog {
 	public static void setlog(String table,String fileName,String path,String driver,String url ,String user,String passwd) throws SQLException{
  
 		 
-			DBAcess db = new DBAcess();
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
 
-			if (db.createConnLocal( driver, url , user, passwd)) {
+			if (db.createConn()) {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//�������ڸ�ʽ
 				String vtime = df.format(new Date());
 				String sql = "insert into "+table+" (fileName,vtime,path) values ('"+fileName+"','"+vtime+"','"+path+"')";
@@ -48,11 +51,13 @@ public class SetLog {
 		}
 	
 	public static void setlog(String table,String fileName,String path) throws SQLException{
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
 		 
-		 
-		DBAcess db = new DBAcess();
+		//DBAcess db = new DBAcess();
 
-		if (db.createConnLocal()) {
+		if (db.createConn()) {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//�������ڸ�ʽ
 			String vtime = df.format(new Date());
 			String sql = "insert into "+table+" (fileName,vtime,path) values ('"+fileName+"','"+vtime+"','"+path+"')";
@@ -64,9 +69,11 @@ public class SetLog {
 	public static boolean  setlog(String table,String fileName,String path,String localPath,String driver,String url ,String user,String passwd) throws SQLException{
 		 
 		 boolean b = false;
-		DBAcess db = new DBAcess();
+			String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+			String[] dbinfo = DBInfo.split("\\|");
+			DBAccess_new db = new DBAccess_new(dbinfo);
 
-		if (db.createConnLocal( driver, url , user, passwd)) {
+		if (db.createConn()) {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//�������ڸ�ʽ
 			String vtime = df.format(new Date());
 			String sql = "insert into "+table+" (fileName,vtime,path,localpath) values ('"+fileName+"','"+vtime+"','"+path+"' ,'"+localPath+"'    )";
@@ -79,9 +86,11 @@ public class SetLog {
 	public static void setlog(String table,String fileName,String path,String localPath) throws SQLException{
 		 
 		 
-		DBAcess db = new DBAcess();
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
 
-		if (db.createConnLocal()) {
+		if (db.createConn()) {
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//�������ڸ�ʽ
 			String vtime = df.format(new Date());
 			String sql = "insert into "+table+" (fileName,vtime,path,localpath) values ('"+fileName+"','"+vtime+"','"+path+"' ,'"+localPath+"'    )";
@@ -94,9 +103,11 @@ public class SetLog {
 		 
 		int num=0;
 		 
-		DBAcess db = new DBAcess();
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
 
-		if (db.createConnLocal(driver,url,user,passwd)) {
+		if (db.createConn()) {
 			String sql = "select count(*) i  from "+table+" where fileName='"+fileName+"'";
 			db.query(sql);
 			while(db.next()){
@@ -112,9 +123,11 @@ public class SetLog {
 		 
 		int num=0;
 		 
-		DBAcess db = new DBAcess();
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
 
-		if (db.createConnLocal()) {
+		if (db.createConn()) {
 			String sql = "select count(*) i  from "+table+" where fileName='"+fileName+"'";
 			db.query(sql);
 			while(db.next()){
@@ -130,9 +143,11 @@ public class SetLog {
 	public static void updateStatus(String table,String fileName,String driver,String url ,String user,String passwd){
 		 
 		 
-		DBAcess db = new DBAcess();
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
 
-		if (db.createConnLocal( driver, url , user, passwd)) {			 
+		if (db.createConn()) {			 
 			 
 			String sql = "update  "+table+" set status = 'YES' WHERE fileName = '"+fileName+"'";
 			db.update(sql);;
@@ -141,10 +156,13 @@ public class SetLog {
 	}
 		
 	public static void updateStatus(String table,String fileName,String status ){		 
-		 
-		DBAcess db = new DBAcess();
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
+		
+		//DBAcess db = new DBAcess();
 
-		if (db.createConnLocal()) {			 
+		if (db.createConn()) {			 
 			 
 			String sql = "update  "+table+" set status = '"+status+"' WHERE fileName = '"+fileName+"'";
 			db.update(sql);;
@@ -152,7 +170,5 @@ public class SetLog {
 		db.closeConn();
 	}	
 	
-	
-	 
 
 }

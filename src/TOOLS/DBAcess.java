@@ -45,10 +45,10 @@ public class DBAcess {
 			e1.printStackTrace();
 		}
 
-		String driver = prop.getProperty("maximodriver");
-		String url = prop.getProperty("maximourl");
-		String user = prop.getProperty("maximouser");
-		String passwd = prop.getProperty("maximopassword");
+		String driver = prop.getProperty("mysqldriver");
+		String url = prop.getProperty("localurl");
+		String user = prop.getProperty("localuser");
+		String passwd = prop.getProperty("localpassword");
 		// System.out.print(driver);
 
 		try {
@@ -72,10 +72,10 @@ public class DBAcess {
 			e1.printStackTrace();
 		}
 
-		String driver = prop.getProperty("maximodriver");
-		String url = prop.getProperty("IPurl");
-		String user = prop.getProperty("maximouser");
-		String passwd = prop.getProperty("maximopassword");
+		String driver = prop.getProperty("mysqldriver");
+		String url = prop.getProperty("localurl");
+		String user = prop.getProperty("localuser");
+		String passwd = prop.getProperty("localpassword");
 		// System.out.print(driver);
 
 		try {
@@ -117,7 +117,7 @@ public class DBAcess {
 			e1.printStackTrace();
 		}
 
-		String driver = prop.getProperty("maximodriver");
+		String driver = prop.getProperty("mysqldriver");
 		String url = prop.getProperty("localurl");
 		String user = prop.getProperty("localuser");
 		String passwd = prop.getProperty("localpassword");
@@ -148,7 +148,7 @@ public class DBAcess {
 			e1.printStackTrace();
 		}
 
-		String driver = prop.getProperty("maximodriver");
+		String driver = prop.getProperty("mysqldriver");
 		String url = prop.getProperty("localipurl");
 		String user = prop.getProperty("localuser");
 		String passwd = prop.getProperty("localpassword");
