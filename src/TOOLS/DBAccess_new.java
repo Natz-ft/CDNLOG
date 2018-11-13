@@ -157,12 +157,12 @@ public class DBAccess_new {
 			stm = conn.createStatement();
 
 			boolean rows = stm.execute(sql);
-
-			if (rows) {
+			
 				b = true;
-			}
+				
 		} catch (Exception e) {
 			e.printStackTrace();
+			 b = false;
 
 		}
 		return b;

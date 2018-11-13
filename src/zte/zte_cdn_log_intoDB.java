@@ -10,10 +10,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import TOOLS.DBAccess_new;
-import TOOLS.DBAcess;
+//import TOOLS.DBAcess;
 import TOOLS.ReadFromFile;
 import TOOLS.SetLog;
 import TOOLS.getProperties;
+import TOOLS.getDate;
 
 public class zte_cdn_log_intoDB {
 	 public static int duration = getProperties.getINTPropertie("ZTEDuration");
@@ -123,14 +124,14 @@ public class zte_cdn_log_intoDB {
 	        if (m == 0) {
 	          if (db.createTable("CREATE table " + table_name + " as SELECT * from cdn_zte_table where 1 <> 1 "))
 	          {
-	            System.out.println("Table:\t" + table_name + " CREATED! ");
+	           // System.out.println("Table:\t" + table_name + " CREATED! ");
 	            
 	            b = true;
-	            System.out.println("createIndex:\t" + db.createIndex(table_name, new StringBuilder("idx").append(table_name).toString(), "ContentID"));
+	            //System.out.println("createIndex:\t" + db.createIndex(table_name, new StringBuilder("idx").append(table_name).toString(), "ContentID"));
 	          }
 	          else
 	          {
-	            System.out.println("Table:\t" + table_name + " already exists");
+	          //  System.out.println("Table:\t" + table_name + " already exists");
 	            b = true;
 	          }
 	        }
@@ -155,6 +156,7 @@ public class zte_cdn_log_intoDB {
 	      }
 	      String table_name = getTableName(fileName);
 	      
+	      
 	      List<String> list_sql = new ArrayList();
 	      for (int i = 0; i < fileList.size(); i++)
 	      {
@@ -163,9 +165,11 @@ public class zte_cdn_log_intoDB {
 	          if ((logLine[6].contains("accountinfo"))||(table_name.contains("WEBCACHE")))
 	          {
 	            String cellPhone = getUserId(logLine[6]);
-	            
+	            String table_name_day = table_name.substring(0, 24)+logLine[9].substring(0, 8);
+	           // System.out.println("table_name_day\t"+table_name_day);
+	            //System.out.println("table_name\t"+table_name);
 	            String sql = "insert into " + 
-	              table_name + 
+	            		table_name_day + 
 	              " (filename,TermialIP,ServerIP,DomainName,RelativeURL,BeginTime,EndTime,duration,volume,ServiceType,ContentID,userNumber,responsetime,responsecode,FirstRespTime) values" + 
 	              " ('" + fileName + "','" + logLine[0] + "', '" + logLine[2] + "','"+ logLine[5] +"','" + logLine[6] + "', '" + 
 	              logLine[8] + "','" + logLine[9] + "','" + logLine[13] + 
@@ -181,15 +185,17 @@ public class zte_cdn_log_intoDB {
 			DBAccess_new db = new DBAccess_new(dbinfo);
 	      if (db.createConn())
 	      {
-	        b = db.List_insert(list_sql);
+	    	  String sql = "insert into cdn_zte_log_DB (fileName,records) values ('" + fileName + "'," + fileList.size() + ") ";
+		          b = db.insert(sql);
+		        
+		        System.out.println("Import DB:\t" + filePath+ File.separator+ fileName); 
+	           if (b)
+		        {b = db.List_insert(list_sql);}
+	           db.closeConn();
 	        
-	        String sql = "insert into cdn_zte_log_DB (fileName,records) values ('" + fileName + "'," + fileList.size() + ") ";
-	        if (b) {
-	          b = db.insert(sql);
-	        }
-	        System.out.println("Import DB:\t" + filePath+ File.separator+ fileName);
-	        db.closeConn();
-	        b = true;
+	       
+	       
+	         
 	      }
 	      else
 	      {
@@ -280,6 +286,39 @@ public class zte_cdn_log_intoDB {
 	    table_name = table_name.toUpperCase();
 	    return table_name;
 	  }
+	  //getTableName_tomorrow
+	  
+	  public static String getTableName_tomorrow(String fileName)
+	  {
+	    String table_name = fileName.substring(0, 36);
+	    
+	    table_name = table_name.replace("-", "_");
+	    table_name = table_name.replace(".", "_");
+	    
+	    //table_name = table_name.substring(0, 14) + table_name.substring(27, 36);
+	   // System.out.println("table_name.substring(27, 36):"+table_name.substring(28, 36));
+	    table_name = table_name.substring(0,14)+table_name.substring(18,28)+getDate.getTomorrow(table_name.substring(28,36));
+	    //table_name = table_name.substring(0, 14) + "_"+getDate.getTomorrow(table_name.substring(28, 36));
+	    table_name = table_name.toUpperCase();
+	    return table_name;
+	  }
+	  
+	  public static String getTableName_yesterday(String fileName)
+	  {
+	    String table_name = fileName.substring(0, 36);
+	    
+	    table_name = table_name.replace("-", "_");
+	    table_name = table_name.replace(".", "_");
+	    
+	    //table_name = table_name.substring(0, 14) + table_name.substring(27, 36);
+	    //System.out.println("table_name.substring(27, 36):"+table_name.substring(28, 36));
+	    table_name = table_name.substring(0,14)+table_name.substring(18,28)+getDate.getYesterday(table_name.substring(28,36));
+		  
+	    // table_name = table_name.substring(0, 14) + "_"+getDate.getYesterday(table_name.substring(28, 36));
+	    table_name = table_name.toUpperCase();
+	    return table_name;
+	  }
+	  
 	  
 	  
 	  public static List<List<String[]>> getThreadFileList() {

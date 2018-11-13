@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.Security;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,14 +19,14 @@ import TOOLS.getProperties;
 import com.jcraft.jsch.ChannelSftp;
 
 public class zte_cdn_log_sftp {
-	public static	String  sftpServer = getProperties.getPropertie("HWsftpServer").trim();
-	 public static String sftpUser = getProperties.getPropertie("HWsftpUser").trim();
-	 public static String sftpPass = getProperties.getPropertie("HWsftpPass").trim();
-	 public static	String sftpPath = getProperties.getPropertie("HWsftpPath").trim();
-	 public static	String localPath = getProperties.getPropertie("HWlocalPath").trim();
-	 public static	String sftPort =   getProperties.getPropertie("HWsftPort").trim();
-	 public static	String  HWMUST =  getProperties.getPropertie("HWMustHave").trim();
-	 public static	String  HWMDoNOT =  getProperties.getPropertie("HWDoNotHave").trim();
+	public static	String  sftpServer = getProperties.getPropertie("ZTEsftpServer").trim();
+	 public static String sftpUser = getProperties.getPropertie("ZTEsftpUser").trim();
+	 public static String sftpPass = getProperties.getPropertie("ZTEsftpPass").trim();
+	 public static	String sftpPath = getProperties.getPropertie("ZTEsftpPath").trim();
+	 public static	String localPath = getProperties.getPropertie("ZTElocalPath").trim();
+	 public static	String sftPort =   getProperties.getPropertie("ZTEsftPort").trim();
+	 public static	String  ZTEMUST =  getProperties.getPropertie("ZTEMustHave").trim();
+	 public static	String  ZTEMDoNOT =  getProperties.getPropertie("ZTEDoNotHave").trim();
 	 
 	 public static	String driver = getProperties.getPropertie("mysqldriver").trim();
 	 public static	String url = getProperties.getPropertie("localurl").trim();
@@ -52,21 +53,27 @@ public class zte_cdn_log_sftp {
 				e.printStackTrace();
 				}
 			 if (args.length<1){
-				 GetHWCdnLogfileAuto();
+				 GetZTECdnLogfileAuto();
 			 }
 			 else {
-				 GetHWCdnLogfileManual(args[0]);
+				 System.out.println("args[0]\t"+args[0]);
+				 GetZTECdnLogfileManual(args[0]);
+				
 			 }	
 		 
 				 
 			  		
 		}	
 		
-		public static void GetHWCdnLogfileAuto() throws Exception { 
+		public static void GetZTECdnLogfileAuto() throws Exception { 
 			
 			 	while (true) {
-			 		String today=getDate.getTodayEarlyOneHour();
-			 		GetHWCdnLogfileManual(today);
+			 		String today=getDate.getToday();//  getTodayEarlyOneHour();
+			 		GetZTECdnLogfileManual(getDate.getYesterday(today));
+			 		GetZTECdnLogfileManual(today);
+			 		
+			 		 
+					 
 				
 				Thread.sleep(1000 * 60 * intervalTime);
 		    	}
@@ -74,21 +81,32 @@ public class zte_cdn_log_sftp {
 		}
 		
 		
-		public static void GetHWCdnLogfileManual(String today) throws Exception { 
+		public static void GetZTECdnLogfileManual(String today) throws Exception { 
+			 System.out.println("FTPFile_date:\t"+today);
 			String DBInfo =driver+"|"+url+"|"+user+"|"+passwd;
 			String[] dbinfo = DBInfo.split("\\|");
 			ChannelSftp sftp=null;
 			sftp=SftpManager.connect(sftpServer, sftpUser, sftpPass, Integer.parseInt(sftPort));
 			
-			List<String[]> filelist =  SftpManager.GetListFiles(sftp,sftpPath+File.separator+today);
+ 			List<String[]> filelist =  SftpManager.GetListFiles(sftp,sftpPath+File.separator+today);
 			
-			  String[] musts = HWMUST.split("\\|");
+			  String[] musts = ZTEMUST.split("\\|");
 			  
-			  String[] DoNots = HWMDoNOT.split("\\|");
+			  String[] DoNots = ZTEMDoNOT.split("\\|");
 			
 			  DBAccess_new db = new DBAccess_new(dbinfo);
 			  
 		if (db.createConn()) {
+			List<String> list_inserted = new ArrayList<String>();
+            
+			String sql1 = "select fileName from cdn_zte_log_sftp  ";
+			
+			db.query(sql1);
+			
+			while (db.next()){
+		    	 list_inserted.add(db.getValue("fileName")) ;
+		     }		    		 
+		     
 
 			w: for (int i = 0; i < filelist.size(); i++) {
 				// 过滤 0，如果是目录，跳过循环
@@ -107,6 +125,11 @@ public class zte_cdn_log_sftp {
 						continue w;
 					}
 				}
+				
+				// 过滤4，不下载已经下入库的文件 
+				if (list_inserted.contains(filelist.get(i)[1])){
+					continue w;	
+				}
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//�������ڸ�ʽ
 				String vtime = df.format(new Date());
 				
@@ -116,9 +139,8 @@ public class zte_cdn_log_sftp {
 				
 				String sql = "insert into cdn_zte_log_sftp (fileName,vtime,path,localpath) values ('"+filelist.get(i)[1]+"','"+vtime+"','"+filelist.get(i)[2]+"' ,'"+savepath.replace("\\", "\\\\")+"')";
 				
-				if (db.insert(sql)){
-					
-					SftpManager.download(sftp,	filelist.get(i)[2],	localPath  + File.separator+ filelist.get(i)[2].replace(sftpPath, ""),filelist.get(i)[1]);
+				if (SftpManager.download(sftp,	filelist.get(i)[2],	localPath  + File.separator+ filelist.get(i)[2].replace(sftpPath, ""),filelist.get(i)[1])){
+					db.insert(sql);
 					
 					System.out.println(i + ":\t" + filelist.get(i)[2] + "\t"+ filelist.get(i)[1]);
 	
@@ -127,6 +149,8 @@ public class zte_cdn_log_sftp {
 			}
 		   
 		}
+		db.closeStm();
+	     db.closeRs();
 		db.closeConn();
 		SftpManager.disconnect(sftp);
 			

@@ -10,12 +10,12 @@ import TOOLS.getProperties;
 import ZTECDN.ZTE_CDN_LOG_IntoDB;
 import ZTECDN.ZTE_CDN_LOG_IntoDB_THREAD;
 
-public class zte_cdn_log_inotDB_thread extends Thread {
+public class zte_cdn_log_intoDB_thread extends Thread {
 	
 	public static int Threadnum = getProperties.getINTPropertie("ZTEThreadNum");
 	public static int intervalTime = getProperties.getINTPropertie("SleepTime");  
 
-	public zte_cdn_log_inotDB_thread(String name) {
+	public zte_cdn_log_intoDB_thread(String name) {
 		super(name);
 	}
 
@@ -67,12 +67,21 @@ List<List<String[]>> ListListFile = new ArrayList<List<String[]>>();
 		 
 		 for (int k = 0;k<ListListFile.size();k++){
 			//System.out.println(k+"\t"+ ListListFileName.get(k).size());
-			 zte_cdn_log_inotDB_thread jt = null;
+			 zte_cdn_log_intoDB_thread jt = null;
 			  for (int j=0;j<ListListFile.get(k).size();j++)
 			 {    
-				  String table_name = zte_cdn_log_intoDB.getTableName(ListListFile.get(k).get(j)[1]);
+				  String table_name = zte_cdn_log_intoDB.getTableName(ListListFile.get(k).get(j)[1]);				  
+				  String table_name_tomorrow = zte_cdn_log_intoDB.getTableName_tomorrow(ListListFile.get(k).get(j)[1]);  ;//getTomorrow("20181231")
+				 String table_name_yesterday = zte_cdn_log_intoDB.getTableName_yesterday(ListListFile.get(k).get(j)[1]);  ;//getTomorrow("20181231")
+					 
+				  
+				  
+				  
 				  zte_cdn_log_intoDB.CreateTable(table_name);
-				  jt = new zte_cdn_log_inotDB_thread(ListListFile.get(k).get(j)[0]+","+ListListFile.get(k).get(j)[1]);
+				  zte_cdn_log_intoDB.CreateTable(table_name_tomorrow);
+				  zte_cdn_log_intoDB.CreateTable(table_name_yesterday);
+				  
+				  jt = new zte_cdn_log_intoDB_thread(ListListFile.get(k).get(j)[0]+","+ListListFile.get(k).get(j)[1]);
 				  jt.start();
 								 
 			 }

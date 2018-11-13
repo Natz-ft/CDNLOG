@@ -1,6 +1,7 @@
 package TOOLS;
 
 import java.io.PrintStream;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,7 +19,7 @@ public class getDate
   public static void main(String[] args)
     throws Exception
   {
-    getTodayEarlyOneHour();
+	  System.out.println(getTomorrow("20181231"));
   }
   
   public static String getDateToString(Date date)
@@ -200,6 +201,52 @@ public class getDate
 	    return dateString;
   
   }
+  
+  public static String getTomorrow(String  strDate)
+  { 
+	  
+	  SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+	     ParsePosition pos = new ParsePosition(0);
+	      Date date = formatter.parse(strDate, pos);
+	  
+	  Calendar calendar = new GregorianCalendar();
+	    calendar.setTime(date);
+	    
+	    calendar.add(5, 1);
+	    
+	    date = calendar.getTime();
+	    SimpleDateFormat formatter1 = new SimpleDateFormat("yyyyMMdd");
+	    
+	    String dateString = formatter1.format(date);
+	    
+	    return dateString;
+  
+  }
+  
+  
+  public static String getYesterday(String  strDate)
+  { 
+	  
+	  SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+	     ParsePosition pos = new ParsePosition(0);
+	      Date date = formatter.parse(strDate, pos);
+	  
+	  Calendar calendar = new GregorianCalendar();
+	    calendar.setTime(date);
+	    
+	    calendar.add(5, -1);
+	    
+	    date = calendar.getTime();
+	    SimpleDateFormat formatter1 = new SimpleDateFormat("yyyyMMdd");
+	    
+	    String dateString = formatter1.format(date);
+	    
+	    return dateString;
+  
+  }
+  
+  
+  
   
   public static String getToday()
   {

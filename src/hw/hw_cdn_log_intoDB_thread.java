@@ -67,7 +67,12 @@ List<List<String[]>> ListListFile = new ArrayList<List<String[]>>();
 			  for (int j=0;j<ListListFile.get(k).size();j++)
 			 {    
 				  String table_name = hw_cdn_log_intoDB.getTableName(ListListFile.get(k).get(j)[1]);
+				  String table_name_tomorrow = hw_cdn_log_intoDB.getTableName_tomorrow(ListListFile.get(k).get(j)[1]);
+				  String table_name_yesterday = hw_cdn_log_intoDB.getTableName_getYesterday(ListListFile.get(k).get(j)[1]);
+				  
 				  hw_cdn_log_intoDB.CreateTable(table_name);
+				  hw_cdn_log_intoDB.CreateTable(table_name_tomorrow);
+				  hw_cdn_log_intoDB.CreateTable(table_name_yesterday);
 				  jt = new hw_cdn_log_intoDB_thread(ListListFile.get(k).get(j)[0]+","+ListListFile.get(k).get(j)[1]);
 				  jt.start();
 								 
@@ -86,14 +91,14 @@ List<List<String[]>> ListListFile = new ArrayList<List<String[]>>();
 	public static void main(String[] args) throws Exception {
 		// 如果没有参数，程序始终执行，如果有任何参数 程序 执行 一次
 
-		if ( args.length <1 ) {
-			System.out.println("The intoDB Program  restarted  with no para");
+		 
+			System.out.println("The HW_intoDB Program  restarted  with no para");
 			while (true) {
 
 				int i = IntoDB_Thread();				
 				if (i==0){
-				System.out.println("The intoDB Program will restart in 5 min");
-				 Thread.sleep(1000 * 60 * intervalTime);				 
+				System.out.println("The HW_intoDB Program will restart in 10 Sec ");
+				 Thread.sleep(1000 * 10  );				 
 				}
 				else {
 					 Thread.sleep(1000 );
@@ -101,25 +106,7 @@ List<List<String[]>> ListListFile = new ArrayList<List<String[]>>();
 				System.out.println("----------------------------------------------------------------------------");
 			}
 
-		} else {
-			boolean b = true;
-			System.out.println("The intoDB Program  restarted  with para");
-			while (b) {
-			
-				
-				int i = IntoDB_Thread();
-				System.out.println("The intoDB Program will restart in 1 min");
-				
-				
-				
-				System.out.println("----------------------------------------------------------------------------");
-				Thread.sleep(1000);
-				
-				if (i == 0) {			 
-					b = false;
-				}
-			}
-		}
+		 
 	}
 
 }

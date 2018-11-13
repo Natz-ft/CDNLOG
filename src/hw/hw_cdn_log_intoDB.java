@@ -158,9 +158,11 @@ public class hw_cdn_log_intoDB {
           if (logLine[15].contains("accountinfo"))
           {
             String cellPhone = getUserId(logLine[15]);
+            String table_name_day = table_name.substring(0, 24)+logLine[24].substring(0, 8);
+          
             
             String sql = "insert into " + 
-              table_name + 
+            		table_name_day + 
               " (filename,client_port,server_port2,domain,URL,startTime,endTime,Fileduration,file_size,ServiceType,channel_id_public,userNumber,responsetime,http_code,transfer_time) values" + 
               " ('" + fileName + "','" + logLine[9] + "', '" + logLine[4] + "','"+ logLine[11] +"','" + logLine[15] + "', '" + 
               logLine[23] + "','" + logLine[24] + "','" + logLine[21] + 
@@ -174,18 +176,18 @@ public class hw_cdn_log_intoDB {
 		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
 		String[] dbinfo = DBInfo.split("\\|");
 		DBAccess_new db = new DBAccess_new(dbinfo);
-      if (db.createConn())
-      {
-        b = db.List_insert(list_sql);
-        
-        String sql = "insert into cdn_hw_log_DB (fileName,records) values ('" + fileName + "'," + fileList.size() + ") ";
-        if (b) {
-          b = db.insert(sql);
-        }
-        System.out.println("Import DB:\t" + filePath+ File.separator+ fileName);
-        db.closeConn();
-        b = true;
-      }
+			if (db.createConn()) {
+				String sql = "insert into cdn_hw_log_DB (fileName,records) values ('"+ fileName + "'," + fileList.size() + ") ";
+				b = db.insert(sql);
+				System.out.println("Import DB:\t" + filePath + File.separator+ fileName);
+
+				if (b) {
+					b = db.List_insert(list_sql);
+				}
+
+				db.closeConn();
+
+			}
       else
       {
         return false;
@@ -274,12 +276,45 @@ public class hw_cdn_log_intoDB {
       
 	  String city = getcityName(deviceID);
 	  
-	  table_name = fileName.substring(0,21)+city+vdate;
-	  
-	 
+	  table_name = fileName.substring(0,21)+city+vdate; 
      
     return table_name;
   }
+  
+  
+  public static String getTableName_tomorrow(String fileName)
+  {
+	  
+	  String table_name = "";
+	  String deviceID ="";
+	  String vdate =fileName.substring(fileName.indexOf("_",21)+1, fileName.indexOf("_",21)+9);
+	  deviceID = fileName.substring(21);
+	  deviceID = deviceID.substring(0,deviceID.indexOf("_"));
+      
+	  String city = getcityName(deviceID);
+	  //System.out.println("vdate:"+vdate);
+	  table_name = fileName.substring(0,21)+city+"_"+TOOLS.getDate.getTomorrow(vdate); 
+     
+    return table_name;
+  }
+  // TOOLS.getDate.
+  
+  public static String getTableName_getYesterday(String fileName)
+  {
+	  
+	  String table_name = "";
+	  String deviceID ="";
+	  String vdate =fileName.substring(fileName.indexOf("_",21)+1, fileName.indexOf("_",21)+9);
+	  deviceID = fileName.substring(21);
+	  deviceID = deviceID.substring(0,deviceID.indexOf("_"));
+      
+	  String city = getcityName(deviceID);
+	  
+	  table_name = fileName.substring(0,21)+city+"_"+TOOLS.getDate.getYesterday(vdate); 
+     
+    return table_name;
+  }
+  
   
   public static String getcityName(String deviceID){
 	  String city = deviceID ;
@@ -314,7 +349,7 @@ public class hw_cdn_log_intoDB {
 
 		
 
-		String sql = "select path,fileName from cdn_hw_log_unzip where status is null or status = '' ";
+		String sql = "select path,fileName from cdn_hw_log_unzip where status is null or status = '' order by vtime ";
 
 		int i = 0;
 		if (db.createConn()) {

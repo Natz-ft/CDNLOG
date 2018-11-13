@@ -7,6 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Provider;
 import java.security.Security;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,7 +56,9 @@ public class hw_cdn_log_sftp {
 				 GetHWCdnLogfileAuto();
 			 }
 			 else {
+				 System.out.println("args[0]\t"+args[0]);
 				 GetHWCdnLogfileManual(args[0]);
+				
 			 }	
 		 
 				 
@@ -65,22 +68,27 @@ public class hw_cdn_log_sftp {
 		public static void GetHWCdnLogfileAuto() throws Exception { 
 			
 			 	while (true) {
-			 		String today=getDate.getTodayEarlyOneHour();
-			 		GetHWCdnLogfileManual(today);
-				
-				Thread.sleep(1000 * 60 * intervalTime);
+			 		String today=getDate.getToday(); // getTodayEarlyOneHour();
+			 		 		 
+					GetHWCdnLogfileManual(getDate.getYesterday(today));
+					GetHWCdnLogfileManual(today);		
+			
+					 System.out.println("The HW_SFTP Program will restart in 10 Sec ");
+				Thread.sleep(1000 * 10  );
 		    	}
 			
 		}
 		
 		
 		public static void GetHWCdnLogfileManual(String today) throws Exception { 
+			 System.out.println("FTPFile_date:\t"+today);
+			 today = today.trim();
 			String DBInfo =driver+"|"+url+"|"+user+"|"+passwd;
 			String[] dbinfo = DBInfo.split("\\|");
 			ChannelSftp sftp=null;
 			sftp=SftpManager.connect(sftpServer, sftpUser, sftpPass, Integer.parseInt(sftPort));
 			
-			List<String[]> filelist =  SftpManager.GetListFiles(sftp,sftpPath);
+			List<String[]> filelist =  SftpManager.GetListFiles(sftp,sftpPath,today);
 			
 			  String[] musts = HWMUST.split("\\|");
 			  
@@ -89,8 +97,23 @@ public class hw_cdn_log_sftp {
 			  DBAccess_new db = new DBAccess_new(dbinfo);
 			  
 		if (db.createConn()) {
+			
+		//	List<String> list_inserted = new ArrayList<String>();
+			
+			List<String> list_inserted = new ArrayList<String>();
+                      
+			db.query("select fileName from cdn_hw_log_sftp where fileName like '%"+today+"%' ");
+			
+		     while (db.next()){
+		    	 list_inserted.add(db.getValue("fileName")) ;
+		     }
+		     
+			
 
 			w: for (int i = 0; i < filelist.size(); i++) {
+				
+				
+				
 				// 过滤 0，如果是目录，跳过循环
 				if (!filelist.get(i)[0].equals("0")) {// dir is ignore 目录跳跳过 。
 					continue w;
@@ -109,8 +132,14 @@ public class hw_cdn_log_sftp {
 				}
 				
 				//过滤3，下载指定日期文件
-				if (!filelist.get(i)[1].contains(today)) {
+		/*		if (!filelist.get(i)[1].contains(today)) {
 					continue w;
+				}*/
+				
+				
+				// 过滤4，不下载已经下入库的文件 
+				if (list_inserted.contains(filelist.get(i)[1])){
+					continue w;	
 				}
 				
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//�������ڸ�ʽ
@@ -118,14 +147,26 @@ public class hw_cdn_log_sftp {
 				
 				// 下载
 			    
-				String savepath = localPath  + File.separator+ filelist.get(i)[2].replace(sftpPath, "");
+				String fileName = filelist.get(i)[1];
+				String dir = fileName.substring(fileName.indexOf("T")-1,fileName.indexOf("T") );
 				
-				String sql = "insert into cdn_hw_log_sftp (fileName,vtime,path,localpath) values ('"+filelist.get(i)[1]+"','"+vtime+"','"+filelist.get(i)[2]+"' ,'"+savepath.replace("\\", "\\\\")+"')";
+				if (dir.equals("0")){
+					dir = "10";
+					
+				}
 				
-				if (db.insert(sql)){
+				String  loaclpath_dir =  localPath +dir+File.separator+ "data";
+						// System.out.println("loaclpath_dir:"+loaclpath_dir);
+				
+				
+				String savepath = loaclpath_dir  + File.separator+ filelist.get(i)[2].replace(sftpPath, "");
+				
+				String sql = "insert into cdn_hw_log_sftp (fileName,vtime,path,localpath,filesize) values ('"+filelist.get(i)[1]+"','"+vtime+"','"+filelist.get(i)[2]+"' ,'"+savepath.replace("\\", "\\\\")+"',"+filelist.get(i)[3]+")";
+				
+				if (SftpManager.download(sftp,	filelist.get(i)[2],	loaclpath_dir  + File.separator+ filelist.get(i)[2].replace(sftpPath, ""),filelist.get(i)[1])
+				){
 					
-					SftpManager.download(sftp,	filelist.get(i)[2],	localPath  + File.separator+ filelist.get(i)[2].replace(sftpPath, ""),filelist.get(i)[1]);
-					
+					db.insert(sql);
 					System.out.println(i + ":\t" + filelist.get(i)[2] + "\t"+ filelist.get(i)[1]);
 	
 				}
@@ -133,6 +174,8 @@ public class hw_cdn_log_sftp {
 			}
 		   
 		}
+		 db.closeStm();
+	     db.closeRs();
 		db.closeConn();
 		SftpManager.disconnect(sftp);
 			

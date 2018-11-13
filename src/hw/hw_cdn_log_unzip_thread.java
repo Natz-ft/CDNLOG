@@ -86,14 +86,14 @@ public class hw_cdn_log_unzip_thread extends Thread {
 		public static void main(String[] args) throws Exception {
 			// 如果没有参数，程序始终执行，如果有任何参数 程序 执行 一次   
 
-			System.out.println("The UNZIP_Thread Program  restarted  with no para");
+			System.out.println("The HW_unzip_Thread Program  restarted  with no para");
 			 
 			while (true) {
 
 				int i =  UNZIP_Thread();
 				if (i==0){
-				System.out.println("The UNZIP_Thread Program will restart in 5 min");
-				 Thread.sleep(1000 * 60 * intervalTime);				 
+				System.out.println("The HW_unzip_Thread Program will restart in 10 Sec");
+				 Thread.sleep(1000 * 10 );				 
 				}
 				else {
 					 Thread.sleep(1000 );

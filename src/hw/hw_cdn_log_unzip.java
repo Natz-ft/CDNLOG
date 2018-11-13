@@ -416,7 +416,7 @@ public class hw_cdn_log_unzip {
 
 		
 
-		String sql = "select localpath,fileName from cdn_hw_log_sftp where status is null or status = ''    ";
+		String sql = "select localpath,fileName from cdn_hw_log_sftp where status is null or status = '' order by  filesize desc   ";
 
 		int i = 0;
 		if (db.createConn()) {

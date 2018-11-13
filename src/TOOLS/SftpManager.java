@@ -154,7 +154,7 @@ public class SftpManager {
 	 * @param srcfile
 	 *            目标服务器上的文件, 不能为目录
 	 */
-	public static void download(ChannelSftp sftp, String srcPath, String saveFile, String srcfile) {
+/*	public static void download(ChannelSftp sftp, String srcPath, String saveFile, String srcfile) {
 		try {
 			sftp.cd(srcPath);
 			File file = new File(saveFile);
@@ -167,7 +167,30 @@ public class SftpManager {
 		} catch (Exception e) {
 			logger.error("download file: {} error", srcPath + SystemUtils.FILE_SEPARATOR + srcfile, e);
 		}
+	}*/
+	
+	public static boolean download (ChannelSftp sftp, String srcPath, String saveFile, String srcfile) {
+		boolean b =false ;
+		
+		try {
+			sftp.cd(srcPath);
+			File file = new File(saveFile);
+			file.mkdirs();//
+			if (file.isDirectory()) {
+				sftp.get(srcfile, new FileOutputStream(file + SystemUtils.FILE_SEPARATOR + srcfile));
+			} else {
+				sftp.get(srcfile, new FileOutputStream(file));
+				
+			}
+			b =true;
+		} catch (Exception e) {
+			logger.error("download file: {} error", srcPath + SystemUtils.FILE_SEPARATOR + srcfile, e);
+		}
+		return b ;
 	}
+	
+	
+	
  
 	/**
 	 * 使用sftp下载目标服务器上某个目录下指定类型的文件, 得到的文件名与 sftp服务器上的相同
@@ -555,7 +578,28 @@ return b;
 		return fileList;
 	}
 	
-	
+	public static List<String[]> GetListFiles(ChannelSftp sftp, String srcPath,String filename) throws SftpException {
+		List<String[]> fileList4 = new ArrayList<String[]>();
+		
+		filename = filename.trim();
+		
+		fileList4 = GetListFiles(sftp, srcPath);
+		System.out.println("filename:\t"+filename);
+		System.out.println("fileListSize:\t"+fileList4.size());
+		if (!filename.equals("")) {
+			for (int i = 0; i < fileList4.size(); i++) {
+ 
+				if (!fileList4.get(i)[1].contains(filename)) {
+					//System.out.println("filename:\t"+fileList4.get(i)[1]);
+					fileList4.remove(i);
+					i=i-1;
+				}
+			}
+		}
+		 
+		System.out.println("fileListSize:\t"+fileList4.size());
+		return fileList4;
+	}
 	
 	public static List<String[]> GetListFiles(ChannelSftp sftp, String srcPath) throws SftpException {
 		
@@ -570,11 +614,14 @@ return b;
 		for (LsEntry lsEntry : sftpFile) {
 		 
 		String isDir = "0"; 
-		String FILENAME[]   = new String[3];
+		String FILENAME[]   = new String[4];
 			 Object its= lsEntry  ;
-             String FtpLongName = its.toString() ;             
+             String FtpLongName = its.toString() ;         
+            
+             String Longname = lsEntry.getLongname();          
              
              String  fileName = lsEntry.getFilename();
+            // String fileSize = lsEntry.
 			
 			if (".".equals(fileName) || "..".equals(fileName)) {
 				continue;
@@ -586,9 +633,17 @@ return b;
 				  GetListFiles(sftp, srcPath+"/"+fileName);
 			}
 			
+			
+			String[] dirs = Longname.substring(Longname.indexOf("wisg")+4).trim().split(" ");
+			
+		
+			
+			
 			FILENAME[0] = isDir;
 			FILENAME[1] = fileName;
 			FILENAME[2] =  srcPath;
+			FILENAME[3] =  dirs[0];
+			
 			//fileList2.add(FILENAME);// .add(FILENAME);	
 			//System.out.println(srcPath+"/"+fileName);
 			//fileList2.add(FILENAME);
