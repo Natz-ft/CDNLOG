@@ -28,18 +28,18 @@ public class hw_cdn_log_intoDB_thread extends Thread {
 				// System.out.println("FILE:\t"+FILE);
 				// System.out.println("fileName:\t"+fileName);
 				// System.out.println("filePath:\t"+filePath);
+			
+			//System.out.println(fileName);
+			
+			cdnSetLog.updateStatus("cdn_hw_log_unzip", fileName + ".gz","ING");// 
+			
+			if (hw_cdn_log_intoDB.ImportDB_new(filePath, fileName)) {
+				cdnSetLog.updateStatus("cdn_hw_log_unzip", fileName + ".gz",
+						"YES");// ������־flag
+			} else {
+				cdnSetLog.updateStatus("cdn_hw_log_unzip", fileName + ".gz",
+						"ERROR");
 
-				if (hw_cdn_log_intoDB.ImportDB(filePath, fileName)) /*
-																	 * data
-																	 * import DB
-																	 */
-				{
-					cdnSetLog.updateStatus("cdn_hw_log_unzip",
-							fileName+".gz", "YES");// ������־flag
-				} else {
-					cdnSetLog.updateStatus("cdn_hw_log_unzip",
-							fileName+".gz", "ERROR");
-				 
 			}
 			 
 
@@ -51,11 +51,11 @@ public class hw_cdn_log_intoDB_thread extends Thread {
 	}
    
 	 
-	public static int IntoDB_Thread() throws Exception {
+	public static int IntoDB_Thread(String arg) throws Exception {
 
 List<List<String[]>> ListListFile = new ArrayList<List<String[]>>();
 		
-		ListListFile = hw_cdn_log_intoDB.getThreadFileList();
+		ListListFile = hw_cdn_log_intoDB.getThreadFileList(arg);
 		 int i = ListListFile.size() ;
 		 if (i==0){
 			 return 0;
@@ -79,32 +79,86 @@ List<List<String[]>> ListListFile = new ArrayList<List<String[]>>();
 			 }
 			 
 			  jt.join();
-			  Thread.sleep(1000 );
+			  //Thread.sleep(1000 );
 			 
 		 }
 		 
 		 return i;
 	}
+	
+	public static int IntoDB_Thread_new(String arg) throws Exception {
+
+ 
+List<String[]> ListListFile = new ArrayList<String[]>();
+		ListListFile = hw_cdn_log_intoDB.getThreadFileList_new(arg);
+		 int i = ListListFile.size() ;
+		 if (i==0){
+			 return 0;
+		 }
+		 ThreadGroup currentGroup =Thread.currentThread().getThreadGroup();
+		// Thread curretThread =  Thread.currentThread();
+		 
+		 for (int k = 0;k<ListListFile.size();k++){
+			 hw_cdn_log_intoDB_thread jt = null;
+			// int ThreadCuNo = curretThread.activeCount();
+			
+			 int noThreads = currentGroup.activeCount();
+			 
+			 while(noThreads>= (Threadnum)) {
+				 Thread.sleep(5000 );
+				 noThreads = currentGroup.activeCount();
+				 //ThreadCuNo = curretThread.activeCount();
+				 
+				 System.out.println("当前华为入库线程组数：\t"+noThreads);
+				 
+			 }  
+				  String table_name = hw_cdn_log_intoDB.getTableName_HW(ListListFile.get(k)[1]);
+				   
+				  hw_cdn_log_intoDB.CreateTable(table_name);
+				  
+				    jt = new hw_cdn_log_intoDB_thread(ListListFile.get(k)[0]+","+ListListFile.get(k)[1]);
+				  jt.start();
+								 
+			 }	 
+		 
+		 return i;
+	}
+	
+	
+	
 
 	 
 
-	public static void main(String[] args) throws Exception {
-		// 如果没有参数，程序始终执行，如果有任何参数 程序 执行 一次
-
-		 
+	public static void main(String[] args) throws Exception {	
+	 
+		if (args.length < 1) {
+			// 如果没有参数，程序始终执行，如果有任何参数 程序 执行 一次
 			System.out.println("The HW_intoDB Program  restarted  with no para");
 			while (true) {
-
-				int i = IntoDB_Thread();				
-				if (i==0){
-				System.out.println("The HW_intoDB Program will restart in 10 Sec ");
-				 Thread.sleep(1000 * 10  );				 
-				}
-				else {
-					 Thread.sleep(1000 );
+				//int i = IntoDB_Thread("%");
+				int i = IntoDB_Thread_new("%");
+				
+				if (i == 0) {
+					System.out.println("The HW_intoDB Program will restart in 10 Sec ");
+					Thread.sleep(1000 * 10);
+				} else {
+					Thread.sleep(1000);
 				}
 				System.out.println("----------------------------------------------------------------------------");
 			}
+		} else {
+			System.out.println("The HW_intoDB Program  restarted  with   para:'"+args[0]+"'");
+			//IntoDB_Thread(args[0]);
+			  IntoDB_Thread_new("%");
+
+		}
+			
+			
+			
+			
+			
+			
+			
 
 		 
 	}

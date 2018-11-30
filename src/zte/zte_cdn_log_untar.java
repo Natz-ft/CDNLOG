@@ -413,7 +413,8 @@ public class zte_cdn_log_untar {
 	  public static void dearchivefile(String path, String fileName)
 	  {
 	    try
-	    {
+	    { 
+	    	cdnSetLog.updateStatus("cdn_zte_log_unzip", fileName, "ING");
 	      System.out.println("UNTAR FILEL:\t" + path + File.separator + fileName.replace(".gz", ""));
 	      if (dearchive(path + File.separator + fileName.replace(".gz", ""), path.replace("\\", "\\\\")))
 	      {

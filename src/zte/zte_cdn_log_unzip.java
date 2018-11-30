@@ -385,7 +385,7 @@ public class zte_cdn_log_unzip {
 		 
 		 public static void decompressFile(String path,String fileName) throws Exception { // ͨ����־���ѹ���ļ����н�ѹ���� 
 				 
-					 
+			 cdnSetLog.updateStatus("cdn_zte_log_sftp", fileName,"ING");
 
 					if (decompressSingleFile(path, fileName)) {
 						cdnSetLog.updateStatus("cdn_zte_log_sftp", fileName,"YES");

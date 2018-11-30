@@ -32,7 +32,8 @@ public class zte_cdn_log_intoDB_thread extends Thread {
 				// System.out.println("FILE:\t"+FILE);
 				// System.out.println("fileName:\t"+fileName);
 				// System.out.println("filePath:\t"+filePath);
-
+			cdnSetLog.updateStatus("cdn_zte_log_untar",
+					fileName.replace(".txt", ".tar.gz"), "ING");// ������־flag
 				if (zte_cdn_log_intoDB.ImportDB(filePath, fileName)) /*
 																	 * data
 																	 * import DB

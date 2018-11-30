@@ -148,7 +148,7 @@ public class hw_cdn_log_sftp {
 				// 下载
 			    
 				String fileName = filelist.get(i)[1];
-				String dir = fileName.substring(fileName.indexOf("T")-1,fileName.indexOf("T") );
+				String dir = fileName.substring(fileName.indexOf("Z")-1,fileName.indexOf("Z") );
 				
 				if (dir.equals("0")){
 					dir = "10";

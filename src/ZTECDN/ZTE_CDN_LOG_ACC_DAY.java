@@ -22,7 +22,7 @@ public class ZTE_CDN_LOG_ACC_DAY
   {
     String yesterday = "";
     if (args.length < 1) {
-      yesterday = getDate.getYesterday();
+    	  yesterday = getDate.getYesterday(getDate.getYesterday());
     } else {
       yesterday = args[0];
     }
@@ -33,10 +33,19 @@ public class ZTE_CDN_LOG_ACC_DAY
     accumulative_day(yesterday, "yk");
     accumulative_day(yesterday, "bx");
     
-    netflowInToDB.IntoDB_CDN(yesterday);
-    netflowInToDB.IntoDB_cache(yesterday);
-    netflowInToDB.IntoDB_OTT(yesterday);
-    netflowInToDB.IntoDB_OTT_CITY(yesterday);
+    
+    accumulative_hw_day(yesterday, "sy");
+    accumulative_hw_day(yesterday, "cy");
+    accumulative_hw_day(yesterday, "fs");
+    accumulative_hw_day(yesterday, "fx");
+    accumulative_hw_day(yesterday, "hl");
+    accumulative_hw_day(yesterday, "jz");
+    accumulative_hw_day(yesterday, "ln");
+    accumulative_hw_day(yesterday, "pj");
+    accumulative_hw_day(yesterday, "tl");
+    
+    
+    
   }
   
   public static void accumulative_day(String day, String city)
@@ -58,6 +67,27 @@ public class ZTE_CDN_LOG_ACC_DAY
     
     db.closeConn();
   }
+  
+  public static void accumulative_hw_day(String day, String city)
+		    throws SQLException
+		  {
+		    System.out.println("begein accumulative  file of " + city + "\t" + day);
+		    DBAcess db = new DBAcess();
+		    if (db.createConnLocal())
+		    {
+		      String sql = "insert into cdn_zte_acc_day (city,vdate,users,duration,volume,avg_rat,nums_all,nums_success,responsetime)   SELECT '" + city + "','" + day + "',count(DISTINCT userNumber) users,	(sum(Fileduration) /(1000 * 60 * 60)) duration,	sum(file_size) / (1024 * 1024 * 1024 ) volume,	sum(file_size)  / ((sum(Fileduration) /(1000))) avg_rat,	count(*),	sum( 		CASE 		WHEN http_code LIKE '2%' THEN 			1 		WHEN http_code LIKE '3%' THEN 			1 		ELSE 			0 		END 	),	sum(responsetime) FROM hms_accessdownstream_"+city+"_" + day;
+		      System.out.println(sql);
+		      db.insert(sql);
+		      sql = "insert into cdn_zte_acc_error      (city,vdate,TermialIP,ServerIP,ContentID,responsecode,nums) SELECT 	'" + city + "', 	'" + day + "', 	a.* FROM 	( SELECT client_port, server_port2, channel_id_public, http_code, count(*) s FROM   hms_accessdownstream_"+city+"_" + day+" WHERE http_code LIKE '4%' GROUP BY client_port, server_port2, channel_id_public, http_code 	) a ORDER BY 	s DESC LIMIT 3 " ;
+		      System.out.println(sql);
+		      db.insert(sql);
+		    }
+		    db.closeRs();
+		    db.closeStm();
+		    
+		    db.closeConn();
+		  }
+  
   
   
 	 

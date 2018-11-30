@@ -127,11 +127,11 @@ public class zte_cdn_log_intoDB {
 	           // System.out.println("Table:\t" + table_name + " CREATED! ");
 	            
 	            b = true;
-	            //System.out.println("createIndex:\t" + db.createIndex(table_name, new StringBuilder("idx").append(table_name).toString(), "ContentID"));
+	            System.out.println("createIndex:\t" + db.createIndex(table_name, new StringBuilder("idx").append(table_name).toString(), "ContentID"));
 	          }
 	          else
 	          {
-	          //  System.out.println("Table:\t" + table_name + " already exists");
+	            System.out.println("Table:\t" + table_name + " already exists");
 	            b = true;
 	          }
 	        }
@@ -169,7 +169,7 @@ public class zte_cdn_log_intoDB {
 	           // System.out.println("table_name_day\t"+table_name_day);
 	            //System.out.println("table_name\t"+table_name);
 	            String sql = "insert into " + 
-	            		table_name_day + 
+	            		table_name + 
 	              " (filename,TermialIP,ServerIP,DomainName,RelativeURL,BeginTime,EndTime,duration,volume,ServiceType,ContentID,userNumber,responsetime,responsecode,FirstRespTime) values" + 
 	              " ('" + fileName + "','" + logLine[0] + "', '" + logLine[2] + "','"+ logLine[5] +"','" + logLine[6] + "', '" + 
 	              logLine[8] + "','" + logLine[9] + "','" + logLine[13] + 

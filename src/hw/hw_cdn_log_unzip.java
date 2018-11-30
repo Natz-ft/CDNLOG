@@ -383,7 +383,7 @@ public class hw_cdn_log_unzip {
 		 
 		 public static void decompressFile(String path,String fileName) throws Exception { // ͨ����־���ѹ���ļ����н�ѹ���� 
 				 
-					 
+			         cdnSetLog.updateStatus("cdn_hw_log_sftp", fileName,"ING");
 
 					if (decompressSingleFile(path, fileName)) {
 						cdnSetLog.updateStatus("cdn_hw_log_sftp", fileName,"YES");
@@ -446,6 +446,42 @@ public class hw_cdn_log_unzip {
 		db.closeConn();
 		return ListListFile;
 	}
+	
+	
+	public static List<String[]> getThreadFileList_new() {
+		String DBInfo = driver + "|" + url + "|" + user + "|" + passwd;
+		String[] dbinfo = DBInfo.split("\\|");
+		DBAccess_new db = new DBAccess_new(dbinfo);
+		List<String[]> ListListFile = new ArrayList<String[]>();
+		
+		 
+
+		
+
+		String sql = "select localpath,fileName from cdn_hw_log_sftp where status is null or status = '' order by  filesize desc   ";
+
+		int i = 0;
+		if (db.createConn()) {
+			db.query(sql);
+			while (db.next()) {
+				String fileName[] = new String[2];
+				fileName[0] = db.getValue("localpath");// db.getValue(1);
+				fileName[1] = db.getValue("fileName");
+				 			 
+				ListListFile.add(fileName) ;
+				 
+				}
+
+			 
+		}
+		 
+		db.closeRs();
+		db.closeConn();
+		return ListListFile;
+	}
+	
+	
+	
     public static void main(String[] args) throws Exception { 
 		String path = "F:\\ftp\\";
 		String fileName = "HMS_accessDownstream_349_20181108T050000Z+08.log.gz";
