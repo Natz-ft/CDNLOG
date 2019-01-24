@@ -16,6 +16,7 @@ public class cdn_netflow_acc_day {
 		//netflowInToDB.IntoDB_OTT_CITY(yesterday);
 		netflowInToDB.IntoDB_WEB_CDN_HW(yesterday);
 		netflowInToDB.IntoDB_WEB_CDN_ZTE(yesterday);
+		netflowInToDB.IntoDB_cache_hw_city(yesterday);
 
 	}
 

@@ -24,7 +24,7 @@ public class removeTable {
 		 	   Calendar calendar = new GregorianCalendar();
 			   calendar.setTime(date);
 			   // calendar.add(calendar.DATE,1); tomorrow
-			   calendar.add(calendar.DATE,-10);// yesterday 把日期往后增加一天.整数往后推,负数往前移动
+			   calendar.add(calendar.DATE,-30);// yesterday 把日期往后增加一天.整数往后推,负数往前移动
 			   
 			   date=calendar.getTime(); //这个时间就是日期往后推一天的结果 
 			   SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
@@ -38,13 +38,13 @@ public class removeTable {
 		String[] dbinfo = DBInfo.split("\\|");
 		DBAccess_new db = new DBAccess_new(dbinfo);
 		if (db.createConn()) {
-			String sql = "select TABLE_NAME from information_schema.tables t where   TABLE_NAME like 'hms_accessdownstream%"+ yesterday + "' or TABLE_NAME like 'bcs_cdn_024%'"+yesterday;
+			String sql = "select TABLE_NAME from information_schema.tables t where   TABLE_NAME like 'hms_accessdownstream%"+ yesterday + "' or TABLE_NAME like 'bcs_cdn_024%"+yesterday+"'";
 			System.out.println(sql);
 
 			db.query(sql);
 			while (db.next()) {
 				String device_name = db.getValue("TABLE_NAME");
-
+				//System.out.println(device_name);
 				db.createTable("drop table " + device_name);
 
 			}

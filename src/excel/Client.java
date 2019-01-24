@@ -21,7 +21,7 @@ public class Client {
     	 
     	 //ExcelIntoDB("F://39.134.196.1.xls");;
      try {
-       String path="F:/集团组巡/外网扫描/xls/162_扫描【贵州4】_2018_10_22_xls";
+       String path="F:/port/471";
     	// String path= "F:/集团组巡/test";
     	 
     	 File file=new File(path);
@@ -36,6 +36,7 @@ public class Client {
        String inputStr = tempList[i].toString();
        
        if (fileName.contains("index")){continue;}
+       if (fileName.contains("zip")){continue;}
        
      
     
@@ -46,9 +47,9 @@ public class Client {
        boolean result = m.find();
        while(result) {
         
-       // ExcelIntoDB(inputStr);
+          ExcelIntoDB(inputStr); // 扫描结果入库
     	   
-    	  ExcelIntoDB_port(inputStr);
+    	  ExcelIntoDB_port(inputStr); // 端口入库
     	   
     	   result = m.find();
        }

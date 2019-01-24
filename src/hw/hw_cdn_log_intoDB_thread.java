@@ -109,7 +109,7 @@ List<String[]> ListListFile = new ArrayList<String[]>();
 				 noThreads = currentGroup.activeCount();
 				 //ThreadCuNo = curretThread.activeCount();
 				 
-				 System.out.println("当前华为入库线程组数：\t"+noThreads);
+				// System.out.println("当前华为入库线程组数：\t"+noThreads);
 				 
 			 }  
 				  String table_name = hw_cdn_log_intoDB.getTableName_HW(ListListFile.get(k)[1]);
