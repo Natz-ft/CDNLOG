@@ -1,5 +1,5 @@
 package haoliyuan;
-
+// 飞思达ftp下载程序 for HaoLiyuan
 import TOOLS.FtpUtil;
 import TOOLS.getDate;
 import TOOLS.getProperties;
@@ -21,10 +21,12 @@ public class VixtelFtp {
 	 
 	 
 		public static void main(String[] args) {
-			String today=getDate.getToday();
+			String today=getDate.getLastWeekday(getDate.getToday());
+			
 			String fileName = "Provincial-link-"+today+".csv" ;
-			System.out.println(fileName);
-			fileName = "Provincial-link-20190107.csv"; 
+			
+			//System.out.println(fileName);
+			//fileName = "Provincial-link-20190218.csv"; 
 					 
 		    try {
 		         FtpUtil.downloadFtpFile(VixtelFtpServer, VixtelFtpUser, VixtelFtpPass, Integer.parseInt(VixtelFtPort), VixtelFtpPath, VixtelLocalPath, fileName);  

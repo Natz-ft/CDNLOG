@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 public class CSVUtils {
 	
 	public static void writeCSV() {
@@ -29,12 +30,16 @@ public class CSVUtils {
 		  }
 		}
 	
-	public static void readCSV() {
+	public static void readCSV(String csvFilePath) {
 		  try {
 		    // 用来保存数据
 		    ArrayList<String[]> csvFileList = new ArrayList<String[]>();
 		    // 定义一个CSV路径
-		    String csvFilePath = "F://ftp//Provincial-link-20190107.csv";
+		    if (csvFilePath==null)
+		    {
+		    	csvFilePath = "F://ftp//Provincial-link-20190107.csv";
+		    	}
+		    
 		    // 创建CSV读对象 例如:CsvReader(文件路径，分隔符，编码格式);
 		    CsvReader reader = new CsvReader(csvFilePath, ',', Charset.forName("UTF-8"));
 		    // 跳过表头 如果需要表头的话，这句可以忽略
@@ -57,8 +62,33 @@ public class CSVUtils {
 		    e.printStackTrace();
 		  }
 		}
+	
+	public static ArrayList<String[]> readCsvByRow(String csvFilePath) {
+		 ArrayList<String[]> csvFileList = new ArrayList<String[]>();
+		  try {
+			   
+			    // 创建CSV读对象 例如:CsvReader(文件路径，分隔符，编码格式);
+			    CsvReader reader = new CsvReader(csvFilePath, ',', Charset.forName("UTF-8"));
+			    // 跳过表头 如果需要表头的话，这句可以忽略
+			    //reader.readHeaders();
+			    
+			    // 逐行读入除表头的数据
+			    while (reader.readRecord()) {
+			      System.out.println(reader.getRawRecord()); 
+			      csvFileList.add(reader.getValues()); 
+			    }
+			    reader.close();
+			     
+			  } catch (IOException e) {
+			    e.printStackTrace();
+			  }
+		
+		return csvFileList;
+		
+	}	
+	
 	public static void main(String[] args) throws FileNotFoundException {
-		readCSV();
+		readCSV("F://ftp//Provincial-link-20190107.csv");
 		
 		
 	}

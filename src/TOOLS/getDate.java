@@ -16,11 +16,7 @@ public class getDate
   private static final String C = "yyyy/MM/dd HH:mm:ss";
   private static final String exp = "((^((1[8-9]\\d{2})|([2-9]\\d{3}))([-\\/\\._])(10|12|0?[13578])([-\\/\\._])(3[01]|[12][0-9]|0?[1-9])$)|(^((1[8-9]\\d{2})|([2-9]\\d{3}))([-\\/\\._])(11|0?[469])([-\\/\\._])(30|[12][0-9]|0?[1-9])$)|(^((1[8-9]\\d{2})|([2-9]\\d{3}))([-\\/\\._])(0?2)([-\\/\\._])(2[0-8]|1[0-9]|0?[1-9])$)|(^([2468][048]00)([-\\/\\._])(0?2)([-\\/\\._])(29)$)|(^([3579][26]00)([-\\/\\._])(0?2)([-\\/\\._])(29)$)|(^([1][89][0][48])([-\\/\\._])(0?2)([-\\/\\._])(29)$)|(^([2-9][0-9][0][48])([-\\/\\._])(0?2)([-\\/\\._])(29)$)|(^([1][89][2468][048])([-\\/\\._])(0?2)([-\\/\\._])(29)$)|(^([2-9][0-9][2468][048])([-\\/\\._])(0?2)([-\\/\\._])(29)$)|(^([1][89][13579][26])([-\\/\\._])(0?2)([-\\/\\._])(29)$)|(^([2-9][0-9][13579][26])([-\\/\\._])(0?2)([-\\/\\._])(29)$))";
   
-  public static void main(String[] args)
-    throws Exception
-  {
-	  System.out.println(getTomorrow("20181231"));
-  }
+
   
   public static String getDateToString(Date date)
     throws Exception
@@ -254,7 +250,7 @@ public class getDate
     
     SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
     String vdate = df.format(Long.valueOf(System.currentTimeMillis())).toString();
-    System.out.println(vdate);
+   // System.out.println(vdate);
     
     return vdate;
   }
@@ -270,4 +266,60 @@ public class getDate
     
     return vdate;
   }
+  
+  
+  public static String getHour()
+  {
+    Date day = new Date();
+    
+    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+    String vdate = df.format(Long.valueOf(System.currentTimeMillis())).toString();
+   // System.out.println(vdate);
+    
+    return vdate;
+  }
+  
+  public static String getEarlyOneHour()
+  {
+	  Calendar calendar = Calendar.getInstance();
+	    calendar.setTime(new Date());
+	    calendar.set(10, calendar.get(10) - 1);   
+    
+    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+    //String vdate = df.format(Long.valueOf(System.currentTimeMillis())).toString();
+    String vdate = df.format(calendar.getTime()).toString();
+   // System.out.println(vdate);
+    
+    return vdate;
+  }
+  
+  public static String getLastWeekday(String  strDate)
+  { 
+	  
+	  SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+	     ParsePosition pos = new ParsePosition(0);
+	      Date date = formatter.parse(strDate, pos);
+	  
+	  Calendar calendar = new GregorianCalendar();
+	    calendar.setTime(date);
+	    
+	    calendar.add(5, -7);
+	    
+	    date = calendar.getTime();
+	    SimpleDateFormat formatter1 = new SimpleDateFormat("yyyyMMdd");
+	    
+	    String dateString = formatter1.format(date);
+	    
+	    return dateString;
+  
+  }
+  
+  
+  public static void main(String[] args)
+		    throws Exception
+		  {
+			  //System.out.println(getHour());
+			 // System.out.println(getEarlyOneHour());
+	     System.out.println( getLastWeekday(getToday()));
+		  }
 }

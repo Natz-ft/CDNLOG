@@ -744,8 +744,9 @@ return b;
 		
 		sftp=connect("221.180.170.54", "ftpclient", "iCache9200@huawei", 39200);	 
 		
-		downloadFileList(sftp, "/opt/linshi/02/", "f:\\ftp","20180916","cdn_zte_log_sftp","","","");
-	 
+		//downloadFileList(sftp, "/opt/linshi/02/", "f:\\ftp","20180916","cdn_zte_log_sftp","","","");
+	   
+		upload(sftp,"F:/dirxu.sql","/opt/linshi");
 		disconnect(sftp);
 		
 	}

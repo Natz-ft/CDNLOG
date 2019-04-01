@@ -23,10 +23,12 @@ public  static  String  phantomjs_pic_path = getProperties.getPropertie("phantom
     	Runtime run = Runtime.getRuntime();
     	  DBAcess db = new DBAcess();
     	for (int i=0;i<PAGE.length;i++){
-    		
     		String url =  getProperties.getPropertie("url").trim();
-    		 String vdate  =  getDate.getYesterday();
-    		String  phantomjs_path =  getProperties.getPropertie("phantomjs_path").trim();
+   		   String vdate  =  getDate.getYesterday();
+   		 
+   		String  phantomjs_path =  getProperties.getPropertie("phantomjs_path").trim();
+    		
+    		
     	try {
             // run.exec("cmd /k shutdown -s -t 3600");
     		System.out.println("phantomjs:"+phantomjs_path+"phantomjs "+phantomjs_js+ " "+  url+ PAGE[i]+" "+PAGE[i]+" " +phantomjs_pic_path+" " +vdate);
