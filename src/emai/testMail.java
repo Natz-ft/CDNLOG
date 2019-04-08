@@ -1,5 +1,8 @@
 package emai;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class testMail {
 	public static void main(String[] args) throws Exception {
 		
@@ -8,7 +11,8 @@ public class testMail {
 		email.setSender("xuyangs@ln.chinamobile.com");
 		email.setContent("www.baidu.com|ok<br>www.163.com|<br>www.sina.com|ok<br>");
 		email.setTo("dirxu@126.com");
-		email.setSubject("10001");
+		email.setSubject("10002");
+		email.setAttachPath("f:/student.txt|f:/hello.js");
 		//email.setImagePath("F:\\pic\\A003.png|F:\\pic\\qq.jpg");
 		
 		
@@ -17,9 +21,13 @@ public class testMail {
 		 mmss.setReceiver("dirxu@126.com");
 		 
 		 mmss.setUsername("xuyangs@ln.chinamobile.com");
-		 mmss.setPassword("PaTr@1234");
+		 mmss.setPassword("Ddaboy@1980");
 		 mmss.setSubject("dirxu happy！");
 		 mmss.setContent("text,text");
+		 
+		 //List<String> attacPaths = new ArrayList<String>();		 
+		 //attacPaths.add("c:/student.txt");
+		 // mmss.setAttacPaths(attacPaths);
 		 
 		 MailSender ms = new MailSender();
 		 

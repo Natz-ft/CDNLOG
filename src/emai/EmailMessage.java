@@ -206,4 +206,8 @@ public class EmailMessage implements Serializable {
 	public static String genPK() {
 		return new BigInteger(165, new Random()).toString(36).toUpperCase();
 	}
+
+	 
+	
+	
 }

@@ -176,9 +176,10 @@ public class MailSender {
 			DataHandler dh = new DataHandler(new FileDataSource(source));
 			// jaf会自动探测文件的MIME类型
 			String name = dh.getName();
+			 
 			attachmentPart.setDataHandler(dh);
-			attachmentPart.setFileName(MimeUtility.encodeText(name
-					.substring(name.lastIndexOf("$^%") + 3)));
+			//attachmentPart.setFileName(MimeUtility.encodeText(name.substring(name.lastIndexOf("$^%") + 3)));
+			attachmentPart.setFileName(name);
 			attachmentParts.add(attachmentPart);
 		}
 		return attachmentParts;
