@@ -8,7 +8,7 @@ public class testMail2 {
  
 	public static void main(String[] args) {
 		try {
-		String contetn=	new ReceiveMailHandler().receiveMail2("xuyangs@ln.chinamobile.com", "PaTr@1234","TEST");
+		String contetn=	new ReceiveMailHandler().receiveMail2("13604218538@139.com", "PaTr@1234","TEST");
 		
 		
 		} catch (Exception e) {

@@ -8,7 +8,7 @@ public class testMail {
 		
 		System.out.println("sss");
 		Email email = new Email();
-		email.setSender("xuyangs@ln.chinamobile.com");
+		email.setSender("13604218538@139.com");
 		email.setContent("www.baidu.com|ok<br>www.163.com|<br>www.sina.com|ok<br>");
 		email.setTo("dirxu@126.com");
 		email.setSubject("10002");
@@ -17,10 +17,10 @@ public class testMail {
 		
 		
 		EmailMessage mmss =new EmailMessage(email)  ;
-		 mmss.setEmailAccount("xuyangs@ln.chinamobile.com");
+		 mmss.setEmailAccount("13604218538@139.com");
 		 mmss.setReceiver("dirxu@126.com");
 		 
-		 mmss.setUsername("xuyangs@ln.chinamobile.com");
+		 mmss.setUsername("13604218538@139.com");
 		 mmss.setPassword("");
 		 mmss.setSubject("dirxu happy！");
 		 mmss.setContent("text,text");
