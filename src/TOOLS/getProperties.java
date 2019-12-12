@@ -3,6 +3,7 @@ package TOOLS;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 
@@ -15,7 +16,7 @@ public class getProperties {
 		
 	}
 	
-	public static String getPropertie(String col){
+	public static String getPropertie(String col) {
 		String Properties = "";
 		
 		Properties prop;
@@ -29,7 +30,14 @@ public class getProperties {
 		}
 		
 		  Properties = prop.getProperty(col);
-		
+        
+		try {
+			Properties= new String(Properties.getBytes("ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		  
 		return Properties;
 	}
 	

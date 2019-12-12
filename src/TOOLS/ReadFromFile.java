@@ -20,7 +20,7 @@ public class ReadFromFile
   {
     String fileName = "e:\\test.txt";
     
-    ReadDirectoryFiles("f:\\sss");
+    readFileByLines(fileName);
   }
   
   /* Error */
@@ -67,7 +67,12 @@ public class ReadFromFile
 			// һ�ζ���һ�У�ֱ������nullΪ�ļ�����
 			while ((tempString = reader.readLine()) != null) {
 				// ��ʾ�к�
-				System.out.println("line " + line + ": " + tempString);
+				String [] str = tempString.split("\\|");
+				for (String s :str){
+					//s =new String(s.getBytes("GBK"));
+					// s =new String(s.getBytes("UTF-16BE"), "GBK");   
+					System.out.println(s);
+				}
 				line++;
 			}
 			reader.close();
@@ -82,6 +87,78 @@ public class ReadFromFile
 			}
 		}
 	}
+  public static List<String> getFileByLines(String fileName) {
+		File file = new File(fileName);
+		BufferedReader reader = null;
+		List<String> list=new ArrayList<String>();
+		try {
+			 
+			reader = new BufferedReader(new FileReader(file));
+			String tempString = null;
+			int line = 1;
+			// һ�ζ���һ�У�ֱ������nullΪ�ļ�����
+			while ((tempString = reader.readLine()) != null) {
+				 
+				list.add(tempString);	 
+				line++;
+			}
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e1) {
+				}
+			}
+			return list;
+		}
+	}
+  
+  
+  public static List<String> getFileByLinesByUnicode(String fileName) {
+		//File file = new File(fileName);
+		InputStreamReader read = null;
+		BufferedReader bufread  = null;
+		List<String> list=new ArrayList<String>();
+		try {
+			 
+		 					
+			
+			String tmpLineVal;
+			 read = new InputStreamReader(new FileInputStream(fileName), "Unicode");
+			  bufread = new BufferedReader(read);
+			
+		
+			
+			while((tmpLineVal = bufread.readLine())!=null)
+			{
+										 
+				if  (tmpLineVal.contains("Cookie")){
+				list.add(tmpLineVal);	 
+				}
+			}
+			
+					
+	 
+			bufread.close();
+			read.close();
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (read != null) {
+				try {
+					read.close();
+					bufread.close();
+				} catch (IOException e1) {
+				}
+			}
+			return list;
+		}
+	}
+  
   
   /* Error */
   public static void readFileByChars(String fileName) {
@@ -230,4 +307,68 @@ public class ReadFromFile
       System.out.println(f1.getName());
     }
   }
+  
+  
+  
+  
+  // 判断文件是否存在
+  public static boolean judeFileExists(File file) {
+        boolean b = true;
+      if (file.exists()) {
+         // System.out.println("file exists");
+      } else {
+          System.out.println("FtpLogFile not exists, create it ...");
+          try {
+              file.createNewFile();
+          } catch (IOException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+              b=false;
+          }
+      }
+      return b;
+
+  }
+  
+  // 判断文件是否存在
+  public static boolean checkFileExists(String fileName) {
+        boolean b = true;
+    	File file = new File(fileName);
+      if (file.exists()) {
+         // System.out.println("file exists");
+      } else {
+          
+              // TODO Auto-generated catch block
+             
+              b=false;
+          
+      }
+      return b;
+
+  }
+
+  // 判断文件夹是否存在
+  public static void judeDirExists(File file) {
+
+      if (file.exists()) {
+          if (file.isDirectory()) {
+              System.out.println("dir exists");
+          } else {
+              System.out.println("the same name file exists, can not create dir");
+          }
+      } else {
+          System.out.println("dir not exists, create it ...");
+          file.mkdir();
+      }
+
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }

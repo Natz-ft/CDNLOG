@@ -51,6 +51,7 @@ public class hw_cdn_log_unzip_thread extends Thread {
 		List<String[]> ListListFile = new ArrayList<String[]>();
 
 		ListListFile = hw_cdn_log_unzip.getThreadFileList_new();
+		
 		int i = ListListFile.size();
 		if (i == 0) {
 			return 0;
@@ -70,8 +71,7 @@ public class hw_cdn_log_unzip_thread extends Thread {
 
 			}
 
-			hw_cdn_log_unzip_thread jt = new hw_cdn_log_unzip_thread(
-					ListListFile.get(k)[0] + "," + ListListFile.get(k)[1]);
+			hw_cdn_log_unzip_thread jt = new hw_cdn_log_unzip_thread(ListListFile.get(k)[0] + "," + ListListFile.get(k)[1]);
 			jt.start();
 
 		}

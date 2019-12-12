@@ -27,6 +27,7 @@ public class netflowInToDB {
 		      today = getDate.getToday();
 		    } else {
 		      yesterday = args[0];
+		      today =  getDate.getTomorrow();
 		    }
 		   // IntoDB_cache(yesterday+"000000",today+"000000");
 		    //String str =  getProperties.getPropertie("cache_json").trim();
@@ -39,7 +40,7 @@ public class netflowInToDB {
 	public static void netFlowIntoDB(String yesterday,String today,String url,String json,String type,String tableName,String vdate) throws ParseException, ClientProtocolException, IOException, SQLException{
 		
 		
-					 
+	  try {				 
 		 json=json.replace("yesterday-today", yesterday+"-"+today);		 
 		 System.out.println(url);
 		 System.out.println(json);
@@ -48,7 +49,11 @@ public class netflowInToDB {
 		  System.out.println(str);		  
 		  
 	      List<String> list= getNetflowData.GetSql(str,type, vdate,tableName);
-	      getNetflowData.InToDB(list);
+	      getNetflowData.InToDB(list);}
+	  catch (Exception e){
+		  System.out.println("---------ERROR:\t"+type+"\t"+url+"\t"+json);
+		  e.printStackTrace();
+	  }
 	      
 		
 	}

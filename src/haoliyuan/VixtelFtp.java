@@ -21,15 +21,21 @@ public class VixtelFtp {
 	 
 	 
 		public static void main(String[] args) {
-			String today=getDate.getLastWeekday(getDate.getToday());
+			String today="";//
 			
-			String fileName = "Provincial-link-"+today+".csv" ;
 			
-			//System.out.println(fileName);
-			//fileName = "Provincial-link-20190218.csv"; 
-					 
+			
+			if (args.length < 1) {
+				today = getDate.getLastWeekday(getDate.getToday());
+				 
+			} else {
+				today = args[0];				 
+			}
+			String fileName = "Provincial-link-"+today+".csv" ;	 
 		    try {
-		         FtpUtil.downloadFtpFile(VixtelFtpServer, VixtelFtpUser, VixtelFtpPass, Integer.parseInt(VixtelFtPort), VixtelFtpPath, VixtelLocalPath, fileName);  
+		        System.out.println("fileName\t"+fileName); 
+		    	
+		        FtpUtil.downloadFtpFile(VixtelFtpServer, VixtelFtpUser, VixtelFtpPass, Integer.parseInt(VixtelFtPort), VixtelFtpPath, VixtelLocalPath, fileName);  
 		         System.out.println("SUCCESS!!!	Download file "+fileName);
 		    }
 		        catch(NullPointerException e){

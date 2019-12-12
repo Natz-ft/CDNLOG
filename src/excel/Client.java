@@ -21,7 +21,7 @@ public class Client {
     	 
     	 //ExcelIntoDB("F://39.134.196.1.xls");;
      try {
-       String path="F:/port/471";
+       String path="F:\\tmp\\402";
     	// String path= "F:/集团组巡/test";
     	 
     	 File file=new File(path);
@@ -47,7 +47,7 @@ public class Client {
        boolean result = m.find();
        while(result) {
         
-          ExcelIntoDB(inputStr); // 扫描结果入库
+         // ExcelIntoDB(inputStr); // 扫描结果入库
     	   
     	  ExcelIntoDB_port(inputStr); // 端口入库
     	   

@@ -21,7 +21,7 @@ public class testMail {
 		 mmss.setReceiver("dirxu@126.com");
 		 
 		 mmss.setUsername("xuyangs@ln.chinamobile.com");
-		 mmss.setPassword("Ddaboy@1980");
+		 mmss.setPassword("");
 		 mmss.setSubject("dirxu happy！");
 		 mmss.setContent("text,text");
 		 

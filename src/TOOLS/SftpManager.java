@@ -18,6 +18,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
@@ -177,6 +179,7 @@ public class SftpManager {
 			File file = new File(saveFile);
 			file.mkdirs();//
 			if (file.isDirectory()) {
+			   
 				sftp.get(srcfile, new FileOutputStream(file + SystemUtils.FILE_SEPARATOR + srcfile));
 			} else {
 				sftp.get(srcfile, new FileOutputStream(file));
@@ -598,6 +601,18 @@ return b;
 		}
 		 
 		System.out.println("fileListSize:\t"+fileList4.size());
+		return fileList4;
+	}
+	
+	public static List<String[]> DNSGetListFiles(ChannelSftp sftp, String srcPath,String vdate) throws SftpException {
+		List<String[]> fileList4 = new ArrayList<String[]>();
+		
+		vdate = vdate.trim();
+		
+		fileList4 = GetListFiles(sftp, srcPath+File.separator+vdate);
+		 
+		System.out.println("fileListSize:\t"+fileList4.size());	 
+		 
 		return fileList4;
 	}
 	

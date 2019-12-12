@@ -24,7 +24,13 @@ public  static  String  phantomjs_pic_path = getProperties.getPropertie("phantom
     	  DBAcess db = new DBAcess();
     	for (int i=0;i<PAGE.length;i++){
     		String url =  getProperties.getPropertie("url").trim();
-   		   String vdate  =  getDate.getYesterday();
+   		    String vdate  = "";
+   		 if (args.length < 1) {
+   			vdate = getDate.getYesterday();
+   	    } else {
+   	    	vdate = args[0];
+   	    }
+   		     
    		 
    		String  phantomjs_path =  getProperties.getPropertie("phantomjs_path").trim();
     		

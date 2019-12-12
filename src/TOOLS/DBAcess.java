@@ -136,6 +136,69 @@ public class DBAcess {
 		// System.out.println("b:"+b);
 		return b;
 	}
+	
+	public boolean createHlw() { // web
+		boolean b = false;
+		Properties prop;
+		prop = new Properties();
+		try {
+			prop.load(new FileInputStream(getPath()));
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		String driver = prop.getProperty("mysqldriver");
+		String url = prop.getProperty("hlwurl");
+		String user = prop.getProperty("localuser");
+		String passwd = prop.getProperty("localpassword");
+
+	 
+
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url, user, passwd);
+			b = true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+		}
+		// System.out.println("b:"+b);
+		return b;
+	}
+	
+	
+	public boolean createConnLiujy() { // web
+		boolean b = false;
+		Properties prop;
+		prop = new Properties();
+		try {
+			prop.load(new FileInputStream(getPath()));
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+		String driver = prop.getProperty("mysqldriver");
+		String url = prop.getProperty("ljyull");
+		String user = prop.getProperty("localuser");
+		String passwd = prop.getProperty("localpassword");
+
+		// System.out.print("localurl:"+url);
+
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url, user, passwd);
+			b = true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+		}
+		// System.out.println("b:"+b);
+		return b;
+	}
 
 	public boolean createConnLocalIP() { // web
 		boolean b = false;
@@ -507,6 +570,7 @@ public class DBAcess {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return num;
 	}

@@ -24,8 +24,8 @@ public class ZTE_CDN_LOG_SENDEMAIL_PIC {
 		
 		String emailSubject = getProperties.getPropertie("emailSubject").trim();
 		
-		  System.out.println("emailSubject1:"+emailSubject);
-		  emailSubject= new String(emailSubject.getBytes("ISO-8859-1"));
+		 // System.out.println("emailSubject1:"+emailSubject);
+		 // emailSubject= new String(emailSubject.getBytes("ISO-8859-1"));
 		  System.out.println("emailSubject2:"+emailSubject);
 		  
 		  //emailSubject= new String(emailSubject.getBytes("ISO-8859-1"),"GBK");
